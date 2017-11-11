@@ -3,34 +3,34 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://www.seanmooney.info/blog/what-is-openstack/</loc>
+    <loc>http://www.seanmooney.info/blog/what-is-openstack/</loc>
     <lastmod>2017-02-05T18:51:40+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://www.seanmooney.info/blog/</loc>
-    <lastmod>2017-02-05T18:51:40+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.seanmooney.info/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.seanmooney.info/categories/openstack/</loc>
+    <loc>http://www.seanmooney.info/blog/</loc>
     <lastmod>2017-02-05T18:51:40+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://www.seanmooney.info/tags/</loc>
+    <loc>http://www.seanmooney.info/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://www.seanmooney.info/</loc>
+    <loc>http://www.seanmooney.info/categories/openstack/</loc>
+    <lastmod>2017-02-05T18:51:40+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.seanmooney.info/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.seanmooney.info/</loc>
     <lastmod>2017-02-05T18:51:40+00:00</lastmod>
     <priority>0</priority>
   </url>

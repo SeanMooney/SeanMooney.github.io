@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Today I learned</title>
-    <link>https://www.seanmooney.info/</link>
+    <link>http://www.seanmooney.info/</link>
     <description>Recent content on Today I learned</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-ie</language>
     <lastBuildDate>Sun, 05 Feb 2017 18:51:40 +0000</lastBuildDate>
     
-	<atom:link href="https://www.seanmooney.info/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.seanmooney.info/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>what is openstack</title>
-      <link>https://www.seanmooney.info/blog/what-is-openstack/</link>
+      <link>http://www.seanmooney.info/blog/what-is-openstack/</link>
       <pubDate>Sun, 05 Feb 2017 18:51:40 +0000</pubDate>
       
-      <guid>https://www.seanmooney.info/blog/what-is-openstack/</guid>
+      <guid>http://www.seanmooney.info/blog/what-is-openstack/</guid>
       <description>What Is OpenStack? For those of you who have not heard of &amp;ldquo;OpenStack&amp;rdquo; or the OpenStack Foundation, you might be wondering what it is.
 Wikipedia &amp;ldquo;currently&amp;rdquo; defines it as an a free and open-source software platform for cloud computing, mostly deployed
 as an infrastructure-as-a-service (IaaS).
