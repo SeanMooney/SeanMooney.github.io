@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Today I learned</title>
+    <link>seanmooney.github.io/categories/</link>
+    <description>Recent content in Categories on Today I learned</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-ie</language>
+    
+	<atom:link href="seanmooney.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Openstack</title>
+      <link>seanmooney.github.io/categories/openstack/</link>
+      <pubDate>Sun, 05 Feb 2017 18:51:40 +0000</pubDate>
+      
+      <guid>seanmooney.github.io/categories/openstack/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
