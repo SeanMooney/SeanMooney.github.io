@@ -23,6 +23,7 @@
 
         <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Today I learned"/>
 <meta name="twitter:description" content="A blog and portfile of thing i discover day to day."/>
+<meta name="twitter:site" content="@sean-k-mooney"/>
 
         <meta property="og:title" content="Today I learned" />
 <meta property="og:description" content="A blog and portfile of thing i discover day to day." />
@@ -234,7 +235,7 @@
             
 
 
-<li><a href="//twitter.com/share?url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fwhat-is-openstack%2f&text=what%20is%20openstack&via=" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fwhat-is-openstack%2f&text=what%20is%20openstack&via=sean-k-mooney" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
@@ -284,78 +285,83 @@
 
 <h1 id="what-is-openstack">What Is OpenStack?</h1>
 
-<p>For those of you who have not heard of &ldquo;OpenStack&rdquo; or the <a href="http://openstack.org">OpenStack Foundation</a>,
-you might be wondering what it is. Wiki defines it as an a free and open-source
-software platform for cloud computing, mostly deployed as an
-infrastructure-as-a-service (IaaS).</p>
+<p>For those of you who have not heard of &ldquo;OpenStack&rdquo; or the <a href="http://openstack.org">OpenStack Foundation</a>, you might be wondering what it is.<br />
+Wikipedia &ldquo;currently&rdquo; defines it as an a free and open-source software platform for cloud computing, mostly deployed<br />
+as an infrastructure-as-a-service (IaaS).</p>
 
-<p>While that is true, it is incomplete and unless you know what infrastructure
-as a service is it&rsquo;s not very helpful.Granted the wiki page does actually
-explain what OpenStack and what OpenStack does but ill have a go anyway.
-So OpenStack as software, is a collection of composable interrelated projects
-primarily written in python, for creating private and public clouds environments.</p>
+<p>While that is true, it is incomplete and unless you know what infrastructure as a service is it&rsquo;s not very helpful.<br />
+Granted the Wikipedia page does actually explain what OpenStack is and what OpenStack does but ill have a go anyway.</p>
 
-<p>OpenStack provides an abstraction layer that allows a collection of servers
-to be managed as pools of compute, storage and networking services.
-compute, storage and networking are the 3 pillars of IT service that
-make up a standard IT infrastructure. As OpenStack provides a software interface
-to manage these 3 pillars of IT infrastructure it is an Infrastructure as a service offering.</p>
+<p>OpenStack as software is a collection of composable interrelated projects, primarily written in python, for creating<br />
+private and public clouds environments. OpenStack provides an abstraction layer that allows a collection of servers<br />
+to be managed as pools of compute, storage and networking services.</p>
 
-<p>The project that makes up OpenStack IaaS offering are what used to be know as
-the OpenStack core projects.</p>
+<p>Compute, Storage and Networking are the 3 pillars of IT service that make up a standard IT infrastructure.<br />
+OpenStack provides a software interface to manage these 3 pillars of IT infrastructure and is, therefore,<br />
+an Infrastructure as a service offering.</p>
+
+<p>The main projects that comprise OpenStack&rsquo;s IaaS offering are what used to be known as the OpenStack core projects.</p>
 
 <h2 id="core-projects">Core Projects:</h2>
 
 <ul>
-<li> Nova: Compute Project</li>
-<li> Neutron: Networking Project</li>
-<li> keystone: Autentication Project</li>
-<li> Glance: Images as a service Project</li>
-<li> Cinder: Block Storeage Project</li>
-<li> swift: Object Storage Project</li>
+<li>Nova: Compute Project<br /></li>
+<li>Neutron: Networking Project<br /></li>
+<li>keystone: Autentication Project<br /></li>
+<li>Glance: Images as a service Project<br /></li>
+<li>Cinder: Block Storeage Project<br /></li>
+<li>swift: Object Storage Project<br />
+<br /></li>
 </ul>
 
 <h2 id="non-core-projects">Non-Core projects?:</h2>
 
-<p>But if there is a Core then are there more non-core projects?
-For OpenStack that is a resounding YES!!! in fact since the
-creation of the <a href="https://github.com/openstack/governance/blob/master/resolutions/20141202-project-structure-reform-spec.rst">big tent</a> and arguably before, the compendium of OpenStack
-and OpenStack related projects has been expanding beyond IaaS to Orchestration,
-Platform as a service, advanced services such as container orchestration and support
-services such as workflow engines, database as a service, backup as a service and
-many other micro services that can be composed to build your own OpenStack-powered application.</p>
+<p>But if there is a Core then are there more non-core projects? For OpenStack that is a resounding YES!!!<br />
+in fact since the creation of the <a href="https://github.com/openstack/governance/blob/master/resolutions/20141202-project-structure-reform-spec.rst">big tent</a> and arguably before, the compendium of OpenStack<br />
+and OpenStack related projects has been<br />
+expanding beyond IaaS to Orchestration, Platform as a service, advanced services such as container orchestration<br />
+and support services such as workflow engines, database as a service, backup as a service and<br />
+many other micro-services that can be composed to build your own OpenStack-powered application.</p>
 
-<p>A listing of offical project teams can be found in the openstack <a href="https://governance.openstack.org/tc/reference/projects/">govournace</a> repo
+<p>A listing of offical project teams can be found in the openstack <a href="https://governance.openstack.org/tc/reference/projects/">govournace</a> repo<br />
 and many other affilated projects can be found by exploring the openstack namesace on <a href="https://github.com/openstack">github</a>.</p>
 
-<h2 id="how-mature-are-all-test-projects">How mature are all test projects?</h2>
+<h2 id="how-mature-are-all-these-projects">How mature are all these projects?</h2>
 
-<p>With all these core and non-core project to choose for do I need them all?
-How mature are they really? Are they all ready to use in my production application?</p>
+<p>With all these core and non-core project to choose for do I need them all? How mature are they really?<br />
+Are they all ready to use in my production application?</p>
 
-<p>Well, the answer to the first question is simple, OpenStack is a composition of micro services that
-work together to provide a could of your own design. if you don&rsquo;t need object storage then you
-can deploy without swift, already have ceph deployed? no problem you can have cinder,nova and glance
-use that as your storage backend. do you want DNS as a service by not orchestration?
-you can deploy designate but leave heat out of your cloud deployment.</p>
+<p>Well, the answer to the first question is simple, OpenStack is a composition of micro-services that<br />
+work together to provide a could of your own design. if you don&rsquo;t need object storage then you<br />
+can deploy without swift, already have ceph deployed? No problem you can have cinder, nova and glance<br />
+can use that as your storage backend. Do you want DNS as a service but not orchestration?<br />
+You can deploy designate but leave heat out of your cloud deployment.</p>
 
-<p>The second question of how mature these projects are is a little harder to answer.
-The OpenStack Core project have matured over many releases to be stable and production
-ready, the advanced services are at a differing level of maturity but luckily the
-OpenStack foundation has been developing a tool to help you make up your own mind.</p>
+<p>The second question of how mature these projects are is a little harder to answer. The OpenStack Core<br />
+projects have matured over many releases to be stable and production ready, the advanced services<br />
+are at a differing level of maturity but luckily the OpenStack foundation has been developing a tool<br />
+to help you make up your own mind.</p>
 
-<p>The OpenStack <a href="https://www.openstack.org/software/project-navigator">Project Navigator</a> is a great place to start and if you still
-have question the reaching out to the comunity is as easy as jumping on <a href="https://wiki.openstack.org/wiki/IRC">irc</a> or
+<p>The OpenStack <a href="https://www.openstack.org/software/project-navigator">Project Navigator</a> is a great place to start and if you still<br />
+have question the reaching out to the comunity is as easy as jumping on <a href="https://wiki.openstack.org/wiki/IRC">irc</a> or<br />
 sending a mail to the <a href="mailto:openstack@lists.openstack.org">mailing list</a>.</p>
 
 <h2 id="future-reading">Future Reading</h2>
 
 <ul>
-<li><a href="http://www.openstack.org">Openstack homepage</a></li>
-<li><a href="https://www.openstack.org/software">Openstack software overview</a></li>
-<li><a href="https://www.youtube.com/watch?v=hWWSaBOMTNo">Openstack architecture 10,000 feet</a></li>
-<li><a href="https://www.youtube.com/playlist?list=PLG2eb1MxWbfEqFEbziT9geOOXwiw9zZOm">intro to neutron</a></li>
-<li><a href="https://www.youtube.com/user/OpenStackFoundation">Openstack Foundation youtube</a></li>
+<li><a href="http://openstack.org">Openstack homepage</a><br /></li>
+<li><a href="https://www.openstack.org/software">Openstack software overview</a><br /></li>
+<li><a href="https://www.youtube.com/watch?v=hWWSaBOMTNo">Openstack architecture 10,000 feet</a><br /></li>
+<li><a href="https://www.youtube.com/playlist?list=PLG2eb1MxWbfEqFEbziT9geOOXwiw9zZOm">intro to neutron</a><br /></li>
+<li><a href="https://www.youtube.com/user/OpenStackFoundation">Openstack Foundation youtube</a><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></li>
 </ul>
 
     </div>
@@ -411,7 +417,7 @@ sending a mail to the <a href="mailto:openstack@lists.openstack.org">mailing lis
             
 
 
-<li><a href="//twitter.com/share?url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fwhat-is-openstack%2f&text=what%20is%20openstack&via=" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fwhat-is-openstack%2f&text=what%20is%20openstack&via=sean-k-mooney" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
@@ -472,7 +478,7 @@ sending a mail to the <a href="mailto:openstack@lists.openstack.org">mailing lis
             
                 <header>
                     <h2>Today I Learned</h2>
-                    <p>A collection of random blogs on things i learned form day to day software dev.</p>
+                    <p>A collection of random blogs on things I learned from day to day software dev.</p>
                 </header>
             
             <ul class="icons">
@@ -518,6 +524,7 @@ sending a mail to the <a href="mailto:openstack@lists.openstack.org">mailing lis
 
 
 
+<li><a href="//linkedin.com/in/sean-mooney-7a842429" target="_blank" title="LinkedIn" class="fa fa-linkedin"></a></li>
 
 
 
@@ -531,6 +538,9 @@ sending a mail to the <a href="mailto:openstack@lists.openstack.org">mailing lis
 
 
 
+
+
+<li><a href="//twitter.com/sean-k-mooney" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
 
 
 
@@ -607,7 +617,7 @@ sending a mail to the <a href="mailto:openstack@lists.openstack.org">mailing lis
         
         <section class="blurb">
             <h2>About</h2>
-            <p>I am an opensouce software developer working on openstack. I focus on adding NFV features to openstack and here i will tell you about them and other random things i learn along the way. </p>
+            <p>I am an opensouce software developer working on openstack. I focus on adding NFV features to openstack and here i will tell you about them and other random things i learn along the way.</p>
 
             <ul class="actions">
                 <li><a href="/about/" class="button">Learn More</a></li>
@@ -660,6 +670,7 @@ sending a mail to the <a href="mailto:openstack@lists.openstack.org">mailing lis
 
 
 
+<li><a href="//linkedin.com/in/sean-mooney-7a842429" target="_blank" title="LinkedIn" class="fa fa-linkedin"></a></li>
 
 
 
@@ -673,6 +684,9 @@ sending a mail to the <a href="mailto:openstack@lists.openstack.org">mailing lis
 
 
 
+
+
+<li><a href="//twitter.com/sean-k-mooney" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
 
 
 

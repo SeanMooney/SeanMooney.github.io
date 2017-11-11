@@ -17,8 +17,11 @@
       <pubDate>Sun, 05 Feb 2017 18:51:40 +0000</pubDate>
       
       <guid>https://www.seanmooney.info/blog/what-is-openstack/</guid>
-      <description>What Is OpenStack? For those of you who have not heard of &amp;ldquo;OpenStack&amp;rdquo; or the OpenStack Foundation, you might be wondering what it is. Wiki defines it as an a free and open-source software platform for cloud computing, mostly deployed as an infrastructure-as-a-service (IaaS).
-While that is true, it is incomplete and unless you know what infrastructure as a service is it&amp;rsquo;s not very helpful.Granted the wiki page does actually explain what OpenStack and what OpenStack does but ill have a go anyway.</description>
+      <description>What Is OpenStack? For those of you who have not heard of &amp;ldquo;OpenStack&amp;rdquo; or the OpenStack Foundation, you might be wondering what it is.
+Wikipedia &amp;ldquo;currently&amp;rdquo; defines it as an a free and open-source software platform for cloud computing, mostly deployed
+as an infrastructure-as-a-service (IaaS).
+While that is true, it is incomplete and unless you know what infrastructure as a service is it&amp;rsquo;s not very helpful.
+Granted the Wikipedia page does actually explain what OpenStack is and what OpenStack does but ill have a go anyway.</description>
     </item>
     
   </channel>
