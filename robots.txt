@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://www.seanmooney.info/sitemap.xml

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Blogs on Today I learned</title>
-    <link>https://www.seanmooney.info/blog/</link>
-    <description>Recent content in Blogs on Today I learned</description>
+    <title>Openstack on Today I learned</title>
+    <link>https://www.seanmooney.info/tags/openstack/</link>
+    <description>Recent content in Openstack on Today I learned</description>
     <image>
       <title>Today I learned</title>
       <url>https://www.seanmooney.info/images/papermod-cover.png</url>
@@ -13,7 +13,7 @@
     <language>en</language>
     <copyright>Sean Mooney</copyright>
     <lastBuildDate>Sun, 05 Feb 2017 18:51:40 +0000</lastBuildDate>
-    <atom:link href="https://www.seanmooney.info/blog/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://www.seanmooney.info/tags/openstack/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>what is openstack</title>
       <link>https://www.seanmooney.info/blog/what-is-openstack/</link>
