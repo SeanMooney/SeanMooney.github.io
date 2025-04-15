@@ -12,13 +12,20 @@
     <generator>Hugo -- 0.145.0</generator>
     <language>en</language>
     <copyright>Sean Mooney</copyright>
-    <lastBuildDate>Sun, 05 Feb 2017 18:51:40 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 15 Apr 2025 09:26:03 +0100</lastBuildDate>
     <atom:link href="https://www.seanmooney.info/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Openstack</title>
       <link>https://www.seanmooney.info/tags/openstack/</link>
-      <pubDate>Sun, 05 Feb 2017 18:51:40 +0000</pubDate>
+      <pubDate>Tue, 15 Apr 2025 09:26:03 +0100</pubDate>
       <guid>https://www.seanmooney.info/tags/openstack/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Ptg</title>
+      <link>https://www.seanmooney.info/tags/ptg/</link>
+      <pubDate>Tue, 15 Apr 2025 09:26:03 +0100</pubDate>
+      <guid>https://www.seanmooney.info/tags/ptg/</guid>
       <description></description>
     </item>
   </channel>

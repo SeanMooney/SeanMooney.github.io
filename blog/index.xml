@@ -12,8 +12,29 @@
     <generator>Hugo -- 0.145.0</generator>
     <language>en</language>
     <copyright>Sean Mooney</copyright>
-    <lastBuildDate>Sun, 05 Feb 2017 18:51:40 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 15 Apr 2025 09:26:03 +0100</lastBuildDate>
     <atom:link href="https://www.seanmooney.info/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2025.2 Ptg</title>
+      <link>https://www.seanmooney.info/blog/2025.2-ptg/</link>
+      <pubDate>Tue, 15 Apr 2025 09:26:03 +0100</pubDate>
+      <guid>https://www.seanmooney.info/blog/2025.2-ptg/</guid>
+      <description>&lt;h1 id=&#34;watcher&#34;&gt;Watcher&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://etherpad.opendev.org/p/r.9c40a9e71e93a4be96ebd3e0ad2d7bc4&#34;&gt;PTG Etherpad&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+&lt;p&gt;The 2025.2 PTG was the Second PTG i have attended for watcher.
+The last PTG had one session to cover all the technical debt required
+to revive the project. This time we extended the ptg to 2 days.&lt;/p&gt;
+&lt;h2 id=&#34;day-1&#34;&gt;Day 1&lt;/h2&gt;
+&lt;h3 id=&#34;tech-debt&#34;&gt;Tech Debt&lt;/h3&gt;
+&lt;h4 id=&#34;croniter&#34;&gt;&lt;a href=&#34;https://etherpad.opendev.org/p/r.9c40a9e71e93a4be96ebd3e0ad2d7bc4#L39&#34;&gt;Croniter&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;The PTG started with a disscussion about technical debt that emerged during the
+epxoy cycle. This focused mainly on croniter, which is used by watcher to schedule
+continuous audits based on cron strings. The Croniter libaray maintainer has decided
+to stop maintaining this library and it is transitioning to a new maintainer.
+While that gives watcher some breathing space, our usage is minimal, so we agreed
+to drop the dependency by leveraging the existing functionality of apscheduler.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>what is openstack</title>
       <link>https://www.seanmooney.info/blog/what-is-openstack/</link>
