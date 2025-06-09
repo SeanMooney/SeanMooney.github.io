@@ -12,8 +12,26 @@
     <generator>Hugo -- 0.147.1</generator>
     <language>en</language>
     <copyright>Sean Mooney</copyright>
-    <lastBuildDate>Tue, 15 Apr 2025 09:26:03 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 08 Jun 2025 10:00:00 +0100</lastBuildDate>
     <atom:link href="https://www.seanmooney.info/tags/openstack/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Auto-Correcting Sean-Speak: Beyond Spell-Check to Real AI Assistance</title>
+      <link>https://www.seanmooney.info/blog/ai-to-spec/</link>
+      <pubDate>Sun, 08 Jun 2025 10:00:00 +0100</pubDate>
+      <guid>https://www.seanmooney.info/blog/ai-to-spec/</guid>
+      <description>&lt;h1 id=&#34;using-ai-to-write-openstack-nova-specifications-a-real-world-experiment&#34;&gt;Using AI to Write OpenStack Nova Specifications: A Real-World Experiment.&lt;/h1&gt;
+&lt;h2 id=&#34;background-and-motivation&#34;&gt;Background and Motivation&lt;/h2&gt;
+&lt;p&gt;After attending the 2025.2 PTG and seeing the extensive backlog of specs that
+need to be written, reviewed, and implemented, I decided to run an experiment:
+can AI meaningfully help with the OpenStack specification process? Not just the
+writing, but the actual design thinking and technical architecture work that
+goes into a good Nova spec.&lt;/p&gt;
+&lt;p&gt;The motivation was simple - we have more good ideas than we have time to
+properly document them. Between my day job, core review responsibilities, and
+the general time constraints we all face, turning a concept into a
+well-structured, technically sound specification can take days or weeks. What
+if AI could help accelerate that process?&lt;/p&gt;</description>
+    </item>
     <item>
       <title>2025.2 Ptg</title>
       <link>https://www.seanmooney.info/blog/2025.2-ptg/</link>
@@ -34,24 +52,6 @@ continuous audits based on cron strings. The Croniter libaray maintainer has dec
 to stop maintaining this library and it is transitioning to a new maintainer.
 While that gives watcher some breathing space, our usage is minimal, so we agreed
 to drop the dependency by leveraging the existing functionality of apscheduler.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Auto-Correcting Sean-Speak: Beyond Spell-Check to Real AI Assistance</title>
-      <link>https://www.seanmooney.info/blog/ai-to-spec/</link>
-      <pubDate>Wed, 08 Jan 2025 10:00:00 +0100</pubDate>
-      <guid>https://www.seanmooney.info/blog/ai-to-spec/</guid>
-      <description>&lt;h1 id=&#34;using-ai-to-write-openstack-nova-specifications-a-real-world-experiment&#34;&gt;Using AI to Write OpenStack Nova Specifications: A Real-World Experiment.&lt;/h1&gt;
-&lt;h2 id=&#34;background-and-motivation&#34;&gt;Background and Motivation&lt;/h2&gt;
-&lt;p&gt;After attending the 2025.2 PTG and seeing the extensive backlog of specs that
-need to be written, reviewed, and implemented, I decided to run an experiment:
-can AI meaningfully help with the OpenStack specification process? Not just the
-writing, but the actual design thinking and technical architecture work that
-goes into a good Nova spec.&lt;/p&gt;
-&lt;p&gt;The motivation was simple - we have more good ideas than we have time to
-properly document them. Between my day job, core review responsibilities, and
-the general time constraints we all face, turning a concept into a
-well-structured, technically sound specification can take days or weeks. What
-if AI could help accelerate that process?&lt;/p&gt;</description>
     </item>
     <item>
       <title>what is openstack</title>
