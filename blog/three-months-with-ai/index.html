@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Three Months with AI: Building, Coding, and Contributing | Today I learned</title>
+<meta name="keywords" content="ai, openstack, development, experimentation">
+<meta name="description" content="Three Months with AI: From Experiment to Daily Workflow
+Over the past three months, I&rsquo;ve been intentionally exploring how AI can fit into my software development workflow. Here&rsquo;s what I learned.
+Building with AI: The Prototype Experiment
+My initial foray into AI tooling was building a prototype to understand the fundamentals. I spent about 6 hours creating ca-bhfuil, a simple experiment in combining multiple AI components:
+
+LangChain and LangGraph as the agent framework
+Ollama for local LLM hosting
+sqlite-vec as a basic vector database for RAG experimentation
+
+The result was a very simple prototype using hardcoded data to demonstrate
+storing commit messages in a vector database, prompting an LLM to use RAG
+to retrieve relevant data, and generating responses. You can see an example response in the commit message.">
+<meta name="author" content="Sean Mooney">
+<link rel="canonical" href="https://www.seanmooney.info/blog/three-months-with-ai/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://www.seanmooney.info/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://www.seanmooney.info/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.seanmooney.info/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://www.seanmooney.info/apple-touch-icon.png">
+<link rel="mask-icon" href="https://www.seanmooney.info/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://www.seanmooney.info/blog/three-months-with-ai/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="/css/custom.css"><meta property="og:url" content="https://www.seanmooney.info/blog/three-months-with-ai/">
+  <meta property="og:site_name" content="Today I learned">
+  <meta property="og:title" content="Three Months with AI: Building, Coding, and Contributing">
+  <meta property="og:description" content="Three Months with AI: From Experiment to Daily Workflow Over the past three months, I’ve been intentionally exploring how AI can fit into my software development workflow. Here’s what I learned.
+Building with AI: The Prototype Experiment My initial foray into AI tooling was building a prototype to understand the fundamentals. I spent about 6 hours creating ca-bhfuil, a simple experiment in combining multiple AI components:
+LangChain and LangGraph as the agent framework Ollama for local LLM hosting sqlite-vec as a basic vector database for RAG experimentation The result was a very simple prototype using hardcoded data to demonstrate storing commit messages in a vector database, prompting an LLM to use RAG to retrieve relevant data, and generating responses. You can see an example response in the commit message.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2025-06-09T10:00:00+01:00">
+    <meta property="article:modified_time" content="2025-06-09T10:00:00+01:00">
+    <meta property="article:tag" content="Ai">
+    <meta property="article:tag" content="Openstack">
+    <meta property="article:tag" content="Development">
+    <meta property="article:tag" content="Experimentation">
+      <meta property="og:image" content="https://www.seanmooney.info/images/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.seanmooney.info/images/papermod-cover.png">
+<meta name="twitter:title" content="Three Months with AI: Building, Coding, and Contributing">
+<meta name="twitter:description" content="Three Months with AI: From Experiment to Daily Workflow
+Over the past three months, I&rsquo;ve been intentionally exploring how AI can fit into my software development workflow. Here&rsquo;s what I learned.
+Building with AI: The Prototype Experiment
+My initial foray into AI tooling was building a prototype to understand the fundamentals. I spent about 6 hours creating ca-bhfuil, a simple experiment in combining multiple AI components:
+
+LangChain and LangGraph as the agent framework
+Ollama for local LLM hosting
+sqlite-vec as a basic vector database for RAG experimentation
+
+The result was a very simple prototype using hardcoded data to demonstrate
+storing commit messages in a vector database, prompting an LLM to use RAG
+to retrieve relevant data, and generating responses. You can see an example response in the commit message.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blogs",
+      "item": "https://www.seanmooney.info/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Three Months with AI: Building, Coding, and Contributing",
+      "item": "https://www.seanmooney.info/blog/three-months-with-ai/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Three Months with AI: Building, Coding, and Contributing",
+  "name": "Three Months with AI: Building, Coding, and Contributing",
+  "description": "Three Months with AI: From Experiment to Daily Workflow Over the past three months, I\u0026rsquo;ve been intentionally exploring how AI can fit into my software development workflow. Here\u0026rsquo;s what I learned.\nBuilding with AI: The Prototype Experiment My initial foray into AI tooling was building a prototype to understand the fundamentals. I spent about 6 hours creating ca-bhfuil, a simple experiment in combining multiple AI components:\nLangChain and LangGraph as the agent framework Ollama for local LLM hosting sqlite-vec as a basic vector database for RAG experimentation The result was a very simple prototype using hardcoded data to demonstrate storing commit messages in a vector database, prompting an LLM to use RAG to retrieve relevant data, and generating responses. You can see an example response in the commit message.\n",
+  "keywords": [
+    "ai", "openstack", "development", "experimentation"
+  ],
+  "articleBody": "Three Months with AI: From Experiment to Daily Workflow Over the past three months, I’ve been intentionally exploring how AI can fit into my software development workflow. Here’s what I learned.\nBuilding with AI: The Prototype Experiment My initial foray into AI tooling was building a prototype to understand the fundamentals. I spent about 6 hours creating ca-bhfuil, a simple experiment in combining multiple AI components:\nLangChain and LangGraph as the agent framework Ollama for local LLM hosting sqlite-vec as a basic vector database for RAG experimentation The result was a very simple prototype using hardcoded data to demonstrate storing commit messages in a vector database, prompting an LLM to use RAG to retrieve relevant data, and generating responses. You can see an example response in the commit message.\nThis is far from being a useful tool, but it effectively demonstrated the basics of building an AI agent. The project is on hold for now, but I may return to the concept in the future.\nAI in Daily Development The IDE Evolution For several years, I’ve had AI available in my IDE through both VS Code and Emacs. Last quarter, I was using Continue with local models hosted on Ollama. In fact, that was how I mainly used AI for the last 12 months due to changes in my company’s AI policy. This quarter, I briefly experimented with the new Granite Code extension, but it was a regression from Continue for my workflow since I run Ollama remotely — a use case they don’t focus on.\nExploring AI Coding Agents In Q2, I took time to experiment with other AI coding agents, specifically RooCode, Aider, and Claude Code.\nRooCode: The Power User’s Dream RooCode is a powerful agentic open-source agent that extends VS Code. One of the AI YouTubers I follow released custom modes for Roo called Micromanager mode, which prompted me to explore using local models for routine AI code changes while reserving larger models for orchestration and complex tasks.\nThe idea was to have a local-first approach to AI tooling. Unfortunately, the hardware I currently have for running LLMs doesn’t quite have enough memory to work effectively with RooCode. Models advanced enough to handle large amounts of context and support tool calling, like the latest release of Devstral, are tuned to run on systems with 32GB of RAM. My M4 Mac Mini has 16GB, and quantized models that do fit proved unreliable or too slow to be effective.\nHowever, I did use RooCode with hosted models via OpenRouter and Google Cloud to develop a Nova specification, and I wrote a detailed blog post about that process, focusing on how I used AI to work around my dyslexia and produce higher-quality initial versions of specifications.\nAider and Gemini Deep Research: The Eventlet Challenge TL;DR: Used AI to research and debug OpenStack’s Python 3.13 compatibility issues, exploring everything from high-level analysis to experimental code solutions. While the technical solutions weren’t production-ready, AI proved valuable for rapid prototyping and problem exploration.\nOpenStack has a significant problem: it uses a concurrency framework called Eventlet (a Python library that enables cooperative multitasking) which is incompatible with Python 3.13, preventing OpenStack from running on the latest Python version. This became an excellent test case for AI-assisted debugging and research.\nUnderstanding the Problem I used Gemini’s deep research capabilities to explore the background and potential paths forward. After spending an hour or two working with AI to better understand how changes in Python’s threading model due to PEP 703 might cause the errors we’re observing, I produced a comprehensive analysis document.\nUnfortunately, the research made a strong argument for why it’s more important to move off Eventlet quickly rather than trying to extend it to newer Python versions. The conclusion was clear: this isn’t a problem we should solve by patching Eventlet.\nExploring Technical Solutions Despite the research conclusions, I wanted to explore potential workarounds. After 3 hours of trying to use AI to develop a simple reproducer, I used Gemini to brainstorm several different possible fixes in Nova, producing another technical analysis document.\nThe brainstorming session explored several approaches:\nArena Allocation Strategy: Originally I wanted to explore if we could take an arena allocation strategy (a memory management technique where objects are allocated in large blocks) to try and keep the eventlet stack frame alive, but since the underlying bug is with liveness tracking of the frame and the objects in them, that likely won’t work and it’s not easy to do in Python anyway.\nThread Local Storage: My next idea was to use thread local storage (data that’s unique to each thread) or a module level WeakKeyDict to store strong references to the HTTP clients, keyed off the eventlet greenthread (Eventlet’s lightweight thread equivalent). While clever, it’s also too clever and not something we should sprinkle over the code base.\nContext Manager Approach: In the end we arrived at possibly using a context manager to extend the lifecycle, so I iterated with Ollama and some local models to create a hold context manager and then refined it with more powerful models.\nThe Hold Context Manager Experiment The most interesting experiment was developing a context manager to extend object lifecycles:\nimport threading from typing import Any, Optional, TypeVar, Dict, Union, cast T = TypeVar('T') class Hold: \"\"\" Context manager that holds an object in thread-local storage to prevent it from being collected. The context manager creates a namespace in thread-local storage keyed by the context manager's identity (using its memory address) and stores the object there. This ensures the object remains accessible even if the garbage collector attempts to deallocate it during context switches in eventlet green threads. \"\"\" def __init__(self, obj: T) -\u003e None: self.obj = obj self._key = (id(self), hash(obj)) # Precompute key once def __enter__(self) -\u003e T: threading_locals = threading.local() setattr(threading_locals, self._key, self.obj) return self.obj def __exit__(self, exc_type, exc_value, traceback) -\u003e None: threading_locals = threading.local() try: delattr(threading_locals, self._key) except Exception: pass return None I have not proved to myself that this is a good approach either, so for now I’m capturing this experiment in this blog post for future reference.\nAI vs Human Solutions The most fascinating part of this exercise was comparing AI-generated solutions with human expertise. For one of the reported issues, we had a concrete reproducer, so I used Aider with OpenRouter to generate a possible solution.\nWhat was particularly interesting: both DeepSeek and a human developer (Hervé’s approach) independently identified the same problematic function. When I asked AI to generate a solution without mentioning Hervé’s work, it focused on the same code area.\nThe AI solution probably isn’t correct, but this convergence suggests AI can effectively identify problem areas, even when the proposed fixes need significant human refinement.\nCreating an AI Style Guide for OpenStack TL;DR: Developed a comprehensive style guide for using AI with OpenStack development, iterating through multiple AI tools to create both human-readable guidelines and tool-optimized versions.\nMoving from debugging to documentation, my next major AI experiment focused on creating reusable guidelines for AI assistance in open source development.\nAs I used AI more with open source and OpenStack in particular, I wanted to create an AI style guide to encode important information for AI to follow. One thing that became apparent quickly is that paid models are still much more powerful than local models, even though local models are rapidly catching up.\nRegardless of whether it’s hosted or local, open or closed, any usage of AI with open source has critical requirements that must be followed.\nI created the OpenStack AI Style Guide through an iterative process:\nInitial Draft: Used Aider with DeepSeek-R1 to summarize style guidance from the OpenStack hacking repo and its style checks.\nEnhancement: Asked Aider to add non-conflicting enhancements from Google’s latest Python style guide and PEP 8.\nPolicy Integration: Uploaded to Claude.ai and iterated with Claude Sonnet 4 to incorporate guidance from:\nOpenInfra AI Policy DCO replacement resolution OpenStack Conventions: Refined the style to better reflect how OpenStack commit messages are written.\nTool Optimization: Used Claude to distill the guide into a tool-focused version that minimizes context length and token usage alongside the comprehensive guide.\nAfter about 20 iterations with Claude and several earlier versions, I used Claude Code to create a repository that would be easy for AI tools to consume. The end result is the OpenStack AI Style Guide.\nBeyond Code: AI-Enhanced Development Environment TL;DR: Used AI to modernize and maintain my Emacs configuration, turning a procrastinated maintenance task into a streamlined, accessibility-focused development environment.\nWhile most of my AI experiments focused on coding and documentation, I also explored how AI could improve my daily development environment. This led to a significant overhaul of my Emacs configuration—an exercise that perfectly demonstrated AI’s potential for maintenance tasks I’d been avoiding.\nThe Emacs Modernization Project For years I had put off creating a proper Emacs config, preferring minimal customization. But when VS Code started getting on my nerves, I decided to give building out a sophisticated Emacs environment a proper shot. Rather than using Doom or Spacemacs, I stripped everything back to basics and started a literate config from scratch.\nThe transformation was dramatic: AI helped me consolidate scattered settings into proper use-package blocks, fix critical startup errors, and embrace true literate programming principles. The result was nearly 300 lines of reduction while dramatically improving maintainability.\nKey AI-Assisted Improvements:\nProper use-package conventions for both third-party packages and built-in settings Accessibility features including dyslexia-friendly font presets with OpenDyslexic Distraction-free writing environments via olivetti Comprehensive spell-checking workflows with writegood-mode and codespell integration Direct Claude Code integration for AI-assisted configuration management This experiment highlighted an important insight: AI excels at maintenance tasks we tend to procrastinate on. The maintenance overhead that had kept me from building a custom environment became manageable with agentic coding tools like Claude Code and Aider.\nThe Accessibility Connection The Emacs modernization tied directly back to my earlier AI writing experiments. By integrating AI assistance directly into my editing environment, I created a seamless workflow for the kind of writing enhancement that proved so valuable for technical documentation.\nLessons Learned: Three Months of AI Integration After experimenting with AI across prototyping, debugging, documentation, and environment configuration, several clear patterns emerged about where AI genuinely helps versus where it falls short.\nAI Excels At: Structured writing and editing: Transforming rough technical concepts into polished documentation Research synthesis: Combining information from multiple sources into coherent analysis Iterative refinement: Improving drafts through focused feedback loops Accessibility: Helping work around learning disabilities like dyslexia Maintenance tasks: Handling tedious configuration and cleanup work that humans procrastinate on Pattern recognition: Identifying similar code structures or problem areas across different contexts AI Struggles With: Domain expertise: Deep institutional knowledge about OpenStack’s architecture and conventions Community context: Understanding the social and political aspects of open-source development Hardware limitations: Local models require significant resources for complex tasks Tool integration: Many AI coding tools aren’t optimized for remote or self-hosted setups Production readiness: Generated solutions often need significant human refinement for real-world use The Sweet Spot The most effective approach isn’t having AI replace human expertise, but using it as a collaborative partner. AI handles the mechanical aspects of writing and research while human expertise guides architectural decisions, technical trade-offs, and community dynamics.\nIt’s worth noting that AI won’t replace your writing entirely. Your initial draft and ideas remain essential. AI excels at enhancing the skeleton you create, making content more readable and coherent.\nLooking Forward This three-month experiment convinced me that AI can be a powerful tool for OpenStack development when used thoughtfully. Rather than replacing human expertise, AI augments it by helping experienced contributors work more efficiently and potentially helping newer contributors learn faster.\nUsing AI to learn is a double-edged sword. When I first used AI (Copilot) to help me work in Go, it made me feel productive in the new language environment much faster than traditional learning methods.\nHowever, that ease of onboarding comes at a cost. Without struggling through challenges, you won’t embed knowledge as deeply. I don’t recommend new programmers rely heavily on AI until they’ve built critical thinking skills and can reason about the effects of their changes. AI will confidently lead you down the wrong path, and as tools become more powerful, analyzing their suggestions becomes more important, not less.\nThe real success isn’t in any individual tool or technique, but in discovering how AI can lower barriers to high-quality technical contribution. My writing workflow isn’t perfect yet, but it’s significantly better than before and continues to evolve.\nThe future I’m excited about isn’t one where AI writes code for us. Instead, I envision AI helping us express our original intent more clearly and providing tools that enable us to write better code ourselves.\nIf you’re interested in experimenting with AI in your OpenStack work, check out the OpenStack AI Style Guide and feel free to reach out on IRC (sean-k-mooney) or through the usual OpenStack channels.\n",
+  "wordCount" : "2158",
+  "inLanguage": "en",
+  "image": "https://www.seanmooney.info/images/papermod-cover.png","datePublished": "2025-06-09T10:00:00+01:00",
+  "dateModified": "2025-06-09T10:00:00+01:00",
+  "author":{
+    "@type": "Person",
+    "name": "Sean Mooney"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.seanmooney.info/blog/three-months-with-ai/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Today I learned",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.seanmooney.info/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class=" dark" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://www.seanmooney.info/" accesskey="h" title="Today I learned (Alt + H)">Today I learned</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://www.seanmooney.info/blog" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.seanmooney.info/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.seanmooney.info/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.seanmooney.info/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://www.seanmooney.info/">Home</a>&nbsp;»&nbsp;<a href="https://www.seanmooney.info/blog/">Blogs</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Three Months with AI: Building, Coding, and Contributing
+    </h1>
+    <div class="post-meta"><span title='2025-06-09 10:00:00 +0100 IST'>June 9, 2025</span>&nbsp;·&nbsp;11 min&nbsp;·&nbsp;Sean Mooney&nbsp;|&nbsp;<a href="https://github.com/SeanMooney/seanmooney.info/tree/master/content/blog/three-months-with-ai.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#three-months-with-ai-from-experiment-to-daily-workflow" aria-label="Three Months with AI: From Experiment to Daily Workflow">Three Months with AI: From Experiment to Daily Workflow</a><ul>
+                        
+                <li>
+                    <a href="#building-with-ai-the-prototype-experiment" aria-label="Building with AI: The Prototype Experiment">Building with AI: The Prototype Experiment</a></li>
+                <li>
+                    <a href="#ai-in-daily-development" aria-label="AI in Daily Development">AI in Daily Development</a><ul>
+                        
+                <li>
+                    <a href="#the-ide-evolution" aria-label="The IDE Evolution">The IDE Evolution</a></li>
+                <li>
+                    <a href="#exploring-ai-coding-agents" aria-label="Exploring AI Coding Agents">Exploring AI Coding Agents</a><ul>
+                        
+                <li>
+                    <a href="#roocode-the-power-users-dream" aria-label="RooCode: The Power User&rsquo;s Dream">RooCode: The Power User&rsquo;s Dream</a></li>
+                <li>
+                    <a href="#aider-and-gemini-deep-research-the-eventlet-challenge" aria-label="Aider and Gemini Deep Research: The Eventlet Challenge">Aider and Gemini Deep Research: The Eventlet Challenge</a><ul>
+                        
+                <li>
+                    <a href="#understanding-the-problem" aria-label="Understanding the Problem">Understanding the Problem</a></li>
+                <li>
+                    <a href="#exploring-technical-solutions" aria-label="Exploring Technical Solutions">Exploring Technical Solutions</a></li>
+                <li>
+                    <a href="#the-hold-context-manager-experiment" aria-label="The Hold Context Manager Experiment">The Hold Context Manager Experiment</a></li>
+                <li>
+                    <a href="#ai-vs-human-solutions" aria-label="AI vs Human Solutions">AI vs Human Solutions</a></li></ul>
+                </li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#creating-an-ai-style-guide-for-openstack" aria-label="Creating an AI Style Guide for OpenStack">Creating an AI Style Guide for OpenStack</a></li>
+                <li>
+                    <a href="#beyond-code-ai-enhanced-development-environment" aria-label="Beyond Code: AI-Enhanced Development Environment">Beyond Code: AI-Enhanced Development Environment</a><ul>
+                        
+                <li>
+                    <a href="#the-emacs-modernization-project" aria-label="The Emacs Modernization Project">The Emacs Modernization Project</a></li>
+                <li>
+                    <a href="#the-accessibility-connection" aria-label="The Accessibility Connection">The Accessibility Connection</a></li></ul>
+                </li>
+                <li>
+                    <a href="#lessons-learned-three-months-of-ai-integration" aria-label="Lessons Learned: Three Months of AI Integration">Lessons Learned: Three Months of AI Integration</a><ul>
+                        
+                <li>
+                    <a href="#ai-excels-at" aria-label="AI Excels At:">AI Excels At:</a></li>
+                <li>
+                    <a href="#ai-struggles-with" aria-label="AI Struggles With:">AI Struggles With:</a></li>
+                <li>
+                    <a href="#the-sweet-spot" aria-label="The Sweet Spot">The Sweet Spot</a></li></ul>
+                </li>
+                <li>
+                    <a href="#looking-forward" aria-label="Looking Forward">Looking Forward</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="three-months-with-ai-from-experiment-to-daily-workflow">Three Months with AI: From Experiment to Daily Workflow<a hidden class="anchor" aria-hidden="true" href="#three-months-with-ai-from-experiment-to-daily-workflow">#</a></h1>
+<p>Over the past three months, I&rsquo;ve been intentionally exploring how AI can fit into my software development workflow. Here&rsquo;s what I learned.</p>
+<h2 id="building-with-ai-the-prototype-experiment">Building with AI: The Prototype Experiment<a hidden class="anchor" aria-hidden="true" href="#building-with-ai-the-prototype-experiment">#</a></h2>
+<p>My initial foray into AI tooling was building a prototype to understand the fundamentals. I spent about 6 hours creating <a href="https://github.com/SeanMooney/ca-bhfuil">ca-bhfuil</a>, a simple experiment in combining multiple AI components:</p>
+<ul>
+<li><strong>LangChain and LangGraph</strong> as the agent framework</li>
+<li><strong>Ollama</strong> for local LLM hosting</li>
+<li><strong>sqlite-vec</strong> as a basic vector database for RAG experimentation</li>
+</ul>
+<p>The result was a very simple prototype using hardcoded data to demonstrate
+storing commit messages in a vector database, prompting an LLM to use RAG
+to retrieve relevant data, and generating responses. You can see an <a href="https://github.com/SeanMooney/ca-bhfuil/commit/c1df8b24a50098e6a27946d103d962349f40c2a2">example response in the commit message</a>.</p>
+<p>This is far from being a useful tool, but it effectively demonstrated the
+basics of building an AI agent. The project is on hold for now, but I may
+return to the concept in the future.</p>
+<h2 id="ai-in-daily-development">AI in Daily Development<a hidden class="anchor" aria-hidden="true" href="#ai-in-daily-development">#</a></h2>
+<h3 id="the-ide-evolution">The IDE Evolution<a hidden class="anchor" aria-hidden="true" href="#the-ide-evolution">#</a></h3>
+<p>For several years, I&rsquo;ve had AI available in my IDE through both VS Code
+and Emacs. Last quarter, I was using <strong>Continue</strong> with local models hosted on
+<strong>Ollama</strong>. In fact, that was how I mainly used AI for the last 12 months due to
+changes in my company&rsquo;s AI policy. This quarter, I briefly experimented with
+the new <strong>Granite Code</strong> extension, but it was a regression from Continue for
+my workflow since I run Ollama remotely — a use case they don&rsquo;t focus on.</p>
+<h3 id="exploring-ai-coding-agents">Exploring AI Coding Agents<a hidden class="anchor" aria-hidden="true" href="#exploring-ai-coding-agents">#</a></h3>
+<p>In Q2, I took time to experiment with other AI coding agents, specifically
+<strong>RooCode</strong>, <strong>Aider</strong>, and <strong>Claude Code</strong>.</p>
+<h4 id="roocode-the-power-users-dream">RooCode: The Power User&rsquo;s Dream<a hidden class="anchor" aria-hidden="true" href="#roocode-the-power-users-dream">#</a></h4>
+<p><strong>RooCode</strong> is a powerful agentic open-source agent that extends VS Code. One
+of the AI YouTubers I follow released custom modes for Roo called
+<a href="https://github.com/adamwlarson/RooCodeMicroManager"><strong>Micromanager mode</strong></a>,
+which prompted me to explore using local models for routine AI code
+changes while reserving larger models for orchestration and complex tasks.</p>
+<p>The idea was to have a local-first approach to AI tooling. Unfortunately,
+the hardware I currently have for running LLMs doesn&rsquo;t quite have enough
+memory to work effectively with RooCode. Models advanced enough to handle
+large amounts of context and support tool calling, like the latest release
+of <a href="https://mistral.ai/news/devstral"><strong>Devstral</strong></a>, are tuned to run on
+systems with 32GB of RAM. My M4 Mac Mini has 16GB, and quantized models
+that do fit proved unreliable or too slow to be effective.</p>
+<p>However, I did use RooCode with hosted models via <strong>OpenRouter</strong> and <strong>Google Cloud</strong>
+to develop a <a href="https://review.opendev.org/c/openstack/nova-specs/&#43;/951222">Nova specification</a>, and I
+wrote a <a href="https://www.seanmooney.info/blog/ai-to-spec/">detailed blog post</a>
+about that process, focusing on how I used AI to work around my dyslexia
+and produce higher-quality initial versions of specifications.</p>
+<h4 id="aider-and-gemini-deep-research-the-eventlet-challenge">Aider and Gemini Deep Research: The Eventlet Challenge<a hidden class="anchor" aria-hidden="true" href="#aider-and-gemini-deep-research-the-eventlet-challenge">#</a></h4>
+<p><strong>TL;DR</strong>: Used AI to research and debug OpenStack&rsquo;s Python 3.13 compatibility issues, exploring everything from high-level analysis to experimental code solutions. While the technical solutions weren&rsquo;t production-ready, AI proved valuable for rapid prototyping and problem exploration.</p>
+<p>OpenStack has a significant problem: it uses a concurrency framework called Eventlet (a Python library that enables cooperative multitasking) which is incompatible with Python 3.13, preventing OpenStack from running on the latest Python version. This became an excellent test case for AI-assisted debugging and research.</p>
+<h5 id="understanding-the-problem">Understanding the Problem<a hidden class="anchor" aria-hidden="true" href="#understanding-the-problem">#</a></h5>
+<p>I used <strong>Gemini&rsquo;s</strong> deep research capabilities to explore the background and potential paths forward. After spending an hour or two working with AI to better understand how changes in Python&rsquo;s threading model due to <strong>PEP 703</strong> might cause the errors we&rsquo;re observing, I produced a comprehensive analysis document.</p>
+<p>Unfortunately, the research made a strong argument for why it&rsquo;s more important to move off Eventlet quickly rather than trying to extend it to newer Python versions. The conclusion was clear: this isn&rsquo;t a problem we should solve by patching Eventlet.</p>
+<h5 id="exploring-technical-solutions">Exploring Technical Solutions<a hidden class="anchor" aria-hidden="true" href="#exploring-technical-solutions">#</a></h5>
+<p>Despite the research conclusions, I wanted to explore potential workarounds. After 3 hours of trying to use AI to develop a simple <a href="https://github.com/eventlet/eventlet/issues/1032">reproducer</a>, I used <strong>Gemini</strong> to brainstorm several different possible fixes in Nova, producing another technical analysis document.</p>
+<p>The brainstorming session explored several approaches:</p>
+<p><strong>Arena Allocation Strategy</strong>: Originally I wanted to explore if we could take an arena allocation strategy (a memory management technique where objects are allocated in large blocks) to try and keep the eventlet stack frame alive, but since the underlying bug is with liveness tracking of the frame and the objects in them, that likely won&rsquo;t work and it&rsquo;s not easy to do in Python anyway.</p>
+<p><strong>Thread Local Storage</strong>: My next idea was to use thread local storage (data that&rsquo;s unique to each thread) or a module level WeakKeyDict to store strong references to the HTTP clients, keyed off the eventlet greenthread (Eventlet&rsquo;s lightweight thread equivalent). While clever, it&rsquo;s also too clever and not something we should sprinkle over the code base.</p>
+<p><strong>Context Manager Approach</strong>: In the end we arrived at possibly using a context manager to extend the lifecycle, so I iterated with <strong>Ollama</strong> and some local models to create a hold context manager and then refined it with more powerful models.</p>
+<h5 id="the-hold-context-manager-experiment">The Hold Context Manager Experiment<a hidden class="anchor" aria-hidden="true" href="#the-hold-context-manager-experiment">#</a></h5>
+<p>The most interesting experiment was developing a context manager to extend object lifecycles:</p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">threading</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Hold</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    Context manager that holds an object in thread-local storage to prevent it from being collected.
+</span></span></span><span class="line"><span class="cl"><span class="s2">    
+</span></span></span><span class="line"><span class="cl"><span class="s2">    The context manager creates a namespace in thread-local storage keyed by the context manager&#39;s
+</span></span></span><span class="line"><span class="cl"><span class="s2">    identity (using its memory address) and stores the object there. This ensures the object remains
+</span></span></span><span class="line"><span class="cl"><span class="s2">    accessible even if the garbage collector attempts to deallocate it during context switches in
+</span></span></span><span class="line"><span class="cl"><span class="s2">    eventlet green threads.
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">_key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="nb">hash</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>  <span class="c1"># Precompute key once</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">threading_locals</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">setattr</span><span class="p">(</span><span class="n">threading_locals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">threading_locals</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">delattr</span><span class="p">(</span><span class="n">threading_locals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">pass</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">None</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<p>I have not proved to myself that this is a good approach either, so for now I&rsquo;m capturing this experiment in this blog post for future reference.</p>
+<h5 id="ai-vs-human-solutions">AI vs Human Solutions<a hidden class="anchor" aria-hidden="true" href="#ai-vs-human-solutions">#</a></h5>
+<p>The most fascinating part of this exercise was comparing AI-generated solutions with human expertise. For one of the reported issues, we had a concrete reproducer, so I used Aider with OpenRouter to generate a <a href="https://github.com/eventlet/eventlet/pull/1044">possible solution</a>.</p>
+<p>What was particularly interesting: both <strong>DeepSeek</strong> and a human developer (<a href="https://github.com/eventlet/eventlet/pull/1031">Hervé&rsquo;s approach</a>) independently identified the same problematic function. When I asked AI to generate a solution without mentioning Hervé&rsquo;s work, it focused on the same code area.</p>
+<p>The AI solution probably isn&rsquo;t correct, but this convergence suggests AI can effectively identify problem areas, even when the proposed fixes need significant human refinement.</p>
+<h2 id="creating-an-ai-style-guide-for-openstack">Creating an AI Style Guide for OpenStack<a hidden class="anchor" aria-hidden="true" href="#creating-an-ai-style-guide-for-openstack">#</a></h2>
+<p><strong>TL;DR</strong>: Developed a comprehensive style guide for using AI with OpenStack development, iterating through multiple AI tools to create both human-readable guidelines and tool-optimized versions.</p>
+<p>Moving from debugging to documentation, my next major AI experiment focused on creating reusable guidelines for AI assistance in open source development.</p>
+<p>As I used AI more with open source and OpenStack in particular, I wanted
+to create an AI style guide to encode important information for AI to
+follow. One thing that became apparent quickly is that paid models are
+still much more powerful than local models, even though local models are
+rapidly catching up.</p>
+<p>Regardless of whether it&rsquo;s hosted or local, open or closed, any usage of
+AI with open source has critical requirements that must be followed.</p>
+<p>I created the <a href="https://github.com/SeanMooney/openstack-ai-style-guide">OpenStack AI Style Guide</a> through an iterative process:</p>
+<ol>
+<li>
+<p><strong>Initial Draft</strong>: Used <strong>Aider</strong> with <strong>DeepSeek-R1</strong> to summarize style guidance from the <a href="https://github.com/openstack/hacking/blob/master/HACKING.rst">OpenStack hacking repo</a> and its <a href="https://github.com/openstack/hacking/tree/master/hacking/checks">style checks</a>.</p>
+</li>
+<li>
+<p><strong>Enhancement</strong>: Asked <strong>Aider</strong> to add non-conflicting enhancements from Google&rsquo;s latest Python style guide and <strong>PEP 8</strong>.</p>
+</li>
+<li>
+<p><strong>Policy Integration</strong>: Uploaded to <strong>Claude.ai</strong> and iterated with <strong>Claude Sonnet 4</strong> to incorporate guidance from:</p>
+<ul>
+<li><a href="https://openinfra.org/legal/ai-policy">OpenInfra AI Policy</a></li>
+<li><a href="https://raw.githubusercontent.com/openstack/governance/refs/heads/master/resolutions/20250520-replace-the-cla-with-dco-for-all-contributions.rst">DCO replacement resolution</a></li>
+</ul>
+</li>
+<li>
+<p><strong>OpenStack Conventions</strong>: Refined the style to better reflect how <a href="https://wiki.openstack.org/wiki/GitCommitMessages">OpenStack commit messages</a> are written.</p>
+</li>
+<li>
+<p><strong>Tool Optimization</strong>: Used <strong>Claude</strong> to distill the guide into a tool-focused version that minimizes context length and token usage alongside the comprehensive guide.</p>
+</li>
+</ol>
+<p>After about 20 iterations with <strong>Claude</strong> and several earlier versions, I used <strong>Claude Code</strong> to create a repository that would be easy for AI tools to consume. The end result is the <a href="https://github.com/SeanMooney/openstack-ai-style-guide"><strong>OpenStack AI Style Guide</strong></a>.</p>
+<h2 id="beyond-code-ai-enhanced-development-environment">Beyond Code: AI-Enhanced Development Environment<a hidden class="anchor" aria-hidden="true" href="#beyond-code-ai-enhanced-development-environment">#</a></h2>
+<p><strong>TL;DR</strong>: Used AI to modernize and maintain my Emacs configuration, turning a procrastinated maintenance task into a streamlined, accessibility-focused development environment.</p>
+<p>While most of my AI experiments focused on coding and documentation, I also explored how AI could improve my daily development environment. This led to a significant overhaul of my Emacs configuration—an exercise that perfectly demonstrated AI&rsquo;s potential for maintenance tasks I&rsquo;d been avoiding.</p>
+<h3 id="the-emacs-modernization-project">The Emacs Modernization Project<a hidden class="anchor" aria-hidden="true" href="#the-emacs-modernization-project">#</a></h3>
+<p>For years I had put off creating a proper Emacs config, preferring minimal customization. But when VS Code started getting on my nerves, I decided to give building out a sophisticated Emacs environment a proper shot. Rather than using Doom or Spacemacs, I stripped everything back to basics and started a <a href="https://github.com/SeanMooney/emacs/blob/master/lit.org">literate config from scratch</a>.</p>
+<p>The transformation was dramatic: AI helped me consolidate scattered settings into proper use-package blocks, fix critical startup errors, and embrace true literate programming principles. The result was nearly 300 lines of reduction while dramatically improving maintainability.</p>
+<p><strong>Key AI-Assisted Improvements:</strong></p>
+<ul>
+<li>Proper use-package conventions for both third-party packages and built-in settings</li>
+<li>Accessibility features including dyslexia-friendly font presets with OpenDyslexic</li>
+<li>Distraction-free writing environments via olivetti</li>
+<li>Comprehensive spell-checking workflows with writegood-mode and codespell integration</li>
+<li>Direct Claude Code integration for AI-assisted configuration management</li>
+</ul>
+<p>This experiment highlighted an important insight: <strong>AI excels at maintenance tasks we tend to procrastinate on</strong>. The maintenance overhead that had kept me from building a custom environment became manageable with agentic coding tools like Claude Code and Aider.</p>
+<h3 id="the-accessibility-connection">The Accessibility Connection<a hidden class="anchor" aria-hidden="true" href="#the-accessibility-connection">#</a></h3>
+<p>The Emacs modernization tied directly back to my earlier AI writing experiments. By integrating AI assistance directly into my editing environment, I created a seamless workflow for the kind of writing enhancement that proved so valuable for technical documentation.</p>
+<h2 id="lessons-learned-three-months-of-ai-integration">Lessons Learned: Three Months of AI Integration<a hidden class="anchor" aria-hidden="true" href="#lessons-learned-three-months-of-ai-integration">#</a></h2>
+<p>After experimenting with AI across prototyping, debugging, documentation, and environment configuration, several clear patterns emerged about where AI genuinely helps versus where it falls short.</p>
+<h3 id="ai-excels-at">AI Excels At:<a hidden class="anchor" aria-hidden="true" href="#ai-excels-at">#</a></h3>
+<ul>
+<li><strong>Structured writing and editing</strong>: Transforming rough technical concepts into polished documentation</li>
+<li><strong>Research synthesis</strong>: Combining information from multiple sources into coherent analysis</li>
+<li><strong>Iterative refinement</strong>: Improving drafts through focused feedback loops</li>
+<li><strong>Accessibility</strong>: Helping work around learning disabilities like dyslexia</li>
+<li><strong>Maintenance tasks</strong>: Handling tedious configuration and cleanup work that humans procrastinate on</li>
+<li><strong>Pattern recognition</strong>: Identifying similar code structures or problem areas across different contexts</li>
+</ul>
+<h3 id="ai-struggles-with">AI Struggles With:<a hidden class="anchor" aria-hidden="true" href="#ai-struggles-with">#</a></h3>
+<ul>
+<li><strong>Domain expertise</strong>: Deep institutional knowledge about OpenStack&rsquo;s architecture and conventions</li>
+<li><strong>Community context</strong>: Understanding the social and political aspects of open-source development</li>
+<li><strong>Hardware limitations</strong>: Local models require significant resources for complex tasks</li>
+<li><strong>Tool integration</strong>: Many AI coding tools aren&rsquo;t optimized for remote or self-hosted setups</li>
+<li><strong>Production readiness</strong>: Generated solutions often need significant human refinement for real-world use</li>
+</ul>
+<h3 id="the-sweet-spot">The Sweet Spot<a hidden class="anchor" aria-hidden="true" href="#the-sweet-spot">#</a></h3>
+<p>The most effective approach isn&rsquo;t having AI replace human expertise, but using it as a collaborative partner.
+AI handles the mechanical aspects of writing and research while human expertise guides architectural decisions,
+technical trade-offs, and community dynamics.</p>
+<p>It&rsquo;s worth noting that AI won&rsquo;t replace your writing entirely. Your initial draft and ideas remain essential. AI excels at enhancing the skeleton you create, making content more readable and coherent.</p>
+<h2 id="looking-forward">Looking Forward<a hidden class="anchor" aria-hidden="true" href="#looking-forward">#</a></h2>
+<p>This three-month experiment convinced me that AI can be a powerful tool for OpenStack development when used thoughtfully. Rather than replacing human expertise, AI augments it by helping experienced contributors work more efficiently and potentially helping newer contributors learn faster.</p>
+<p>Using AI to learn is a double-edged sword. When I first used AI (Copilot) to help me work in Go, it made me feel productive in the new language environment much faster than traditional learning methods.</p>
+<p>However, that ease of onboarding comes at a cost. Without struggling through challenges, you won&rsquo;t embed knowledge as deeply. I don&rsquo;t recommend new programmers rely heavily on AI until they&rsquo;ve built critical thinking skills and can reason about the effects of their changes. AI will confidently lead you down the wrong path, and as tools become more powerful, analyzing their suggestions becomes more important, not less.</p>
+<p>The real success isn&rsquo;t in any individual tool or technique, but in discovering how AI can lower barriers to high-quality technical contribution. My writing workflow isn&rsquo;t perfect yet, but it&rsquo;s significantly better than before and continues to evolve.</p>
+<p>The future I&rsquo;m excited about isn&rsquo;t one where AI writes code for us. Instead, I envision AI helping us express our original intent more clearly and providing tools that enable us to write better code ourselves.</p>
+<hr>
+<p><em>If you&rsquo;re interested in experimenting with AI in your OpenStack work, check out the <a href="https://github.com/SeanMooney/openstack-ai-style-guide">OpenStack AI Style Guide</a> and feel free to reach out on IRC (sean-k-mooney) or through the usual OpenStack channels.</em></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://www.seanmooney.info/tags/ai/">Ai</a></li>
+      <li><a href="https://www.seanmooney.info/tags/openstack/">Openstack</a></li>
+      <li><a href="https://www.seanmooney.info/tags/development/">Development</a></li>
+      <li><a href="https://www.seanmooney.info/tags/experimentation/">Experimentation</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://www.seanmooney.info/blog/ai-to-spec/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Auto-Correcting Sean-Speak: Beyond Spell-Check to Real AI Assistance</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Three Months with AI: Building, Coding, and Contributing on x"
+            href="https://x.com/intent/tweet/?text=Three%20Months%20with%20AI%3a%20Building%2c%20Coding%2c%20and%20Contributing&amp;url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fthree-months-with-ai%2f&amp;hashtags=ai%2copenstack%2cdevelopment%2cexperimentation">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Three Months with AI: Building, Coding, and Contributing on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fthree-months-with-ai%2f&amp;title=Three%20Months%20with%20AI%3a%20Building%2c%20Coding%2c%20and%20Contributing&amp;summary=Three%20Months%20with%20AI%3a%20Building%2c%20Coding%2c%20and%20Contributing&amp;source=https%3a%2f%2fwww.seanmooney.info%2fblog%2fthree-months-with-ai%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Three Months with AI: Building, Coding, and Contributing on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fthree-months-with-ai%2f&title=Three%20Months%20with%20AI%3a%20Building%2c%20Coding%2c%20and%20Contributing">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Three Months with AI: Building, Coding, and Contributing on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fwww.seanmooney.info%2fblog%2fthree-months-with-ai%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Three Months with AI: Building, Coding, and Contributing on whatsapp"
+            href="https://api.whatsapp.com/send?text=Three%20Months%20with%20AI%3a%20Building%2c%20Coding%2c%20and%20Contributing%20-%20https%3a%2f%2fwww.seanmooney.info%2fblog%2fthree-months-with-ai%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Three Months with AI: Building, Coding, and Contributing on telegram"
+            href="https://telegram.me/share/url?text=Three%20Months%20with%20AI%3a%20Building%2c%20Coding%2c%20and%20Contributing&amp;url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fthree-months-with-ai%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Three Months with AI: Building, Coding, and Contributing on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Three%20Months%20with%20AI%3a%20Building%2c%20Coding%2c%20and%20Contributing&u=https%3a%2f%2fwww.seanmooney.info%2fblog%2fthree-months-with-ai%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>© Sean Mooney</span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
