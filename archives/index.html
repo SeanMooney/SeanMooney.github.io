@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="en" dir="auto" data-theme="dark">
 
 <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +10,7 @@
 <meta name="description" content="archives">
 <meta name="author" content="Sean Mooney">
 <link rel="canonical" href="https://www.seanmooney.info/archives/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://www.seanmooney.info/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://www.seanmooney.info/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://www.seanmooney.info/favicon-32x32.png">
@@ -28,6 +28,12 @@
 
     </style>
 </noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
 <link rel="stylesheet" href="/css/custom.css"><meta property="og:url" content="https://www.seanmooney.info/archives/">
   <meta property="og:site_name" content="Today I learned">
   <meta property="og:title" content="Archive">
@@ -35,10 +41,11 @@
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
       <meta property="og:image" content="https://www.seanmooney.info/images/papermod-cover.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.seanmooney.info/images/papermod-cover.png">
-<meta name="twitter:title" content="Archive">
-<meta name="twitter:description" content="archives">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.seanmooney.info/images/papermod-cover.png">
+  <meta name="twitter:title" content="Archive">
+  <meta name="twitter:description" content="archives">
 
 
 <script type="application/ld+json">
@@ -89,16 +96,8 @@
 }
 </script>
 </head>
-
-<body class="list dark" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    }
-
-</script>
-
-<header class="header">
+<body class="list" id="top">
+    <header class="header">
     <nav class="nav">
         <div class="logo">
             <a href="https://www.seanmooney.info/" accesskey="h" title="Today I learned (Alt + H)">Today I learned</a>
@@ -165,6 +164,29 @@
   </h1>
 </header>
 <div class="archive-year">
+  <h2 class="archive-year-header" id="2026">
+    <a class="archive-header-link" href="#2026">2026</a>
+    <sup class="archive-count">&nbsp;1</sup>
+  </h2>
+  <div class="archive-month">
+    <h3 class="archive-month-header" id="2026-March">
+      <a class="archive-header-link" href="#2026-March">March</a>
+      <sup class="archive-count">&nbsp;1</sup>
+    </h3>
+    <div class="archive-posts">
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">
+          
+          <a aria-label="post link to Improving AI Review with AI Review" href="https://www.seanmooney.info/blog/agentic-ai-teim-review/">Improving AI Review with AI Review</a>
+        </h3>
+        <div class="archive-meta"><span title='2026-03-27 10:00:00 +0100 +0100'>March 27, 2026</span>&nbsp;·&nbsp;<span>23 min</span>&nbsp;·&nbsp;<span>Sean Mooney</span></div>
+        
+        <a class="entry-link" aria-label="post link to Improving AI Review with AI Review" href="https://www.seanmooney.info/blog/agentic-ai-teim-review/"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="archive-year">
   <h2 class="archive-year-header" id="2025">
     <a class="archive-header-link" href="#2025">2025</a>
     <sup class="archive-count">&nbsp;3</sup>
@@ -180,7 +202,7 @@
           
           <a aria-label="post link to Three Months with AI: Building, Coding, and Contributing" href="https://www.seanmooney.info/blog/three-months-with-ai/">Three Months with AI: Building, Coding, and Contributing</a>
         </h3>
-        <div class="archive-meta"><span title='2025-06-09 10:00:00 +0100 +0100'>June 9, 2025</span>&nbsp;·&nbsp;11 min&nbsp;·&nbsp;Sean Mooney</div>
+        <div class="archive-meta"><span title='2025-06-09 10:00:00 +0100 IST'>June 9, 2025</span>&nbsp;·&nbsp;<span>11 min</span>&nbsp;·&nbsp;<span>Sean Mooney</span></div>
         
         <a class="entry-link" aria-label="post link to Three Months with AI: Building, Coding, and Contributing" href="https://www.seanmooney.info/blog/three-months-with-ai/"></a>
       </div>
@@ -189,7 +211,7 @@
           
           <a aria-label="post link to Auto-Correcting Sean-Speak: Beyond Spell-Check to Real AI Assistance" href="https://www.seanmooney.info/blog/ai-to-spec/">Auto-Correcting Sean-Speak: Beyond Spell-Check to Real AI Assistance</a>
         </h3>
-        <div class="archive-meta"><span title='2025-06-08 10:00:00 +0100 +0100'>June 8, 2025</span>&nbsp;·&nbsp;31 min&nbsp;·&nbsp;Sean Mooney</div>
+        <div class="archive-meta"><span title='2025-06-08 10:00:00 +0100 IST'>June 8, 2025</span>&nbsp;·&nbsp;<span>31 min</span>&nbsp;·&nbsp;<span>Sean Mooney</span></div>
         
         <a class="entry-link" aria-label="post link to Auto-Correcting Sean-Speak: Beyond Spell-Check to Real AI Assistance" href="https://www.seanmooney.info/blog/ai-to-spec/"></a>
       </div>
@@ -206,7 +228,7 @@
           
           <a aria-label="post link to 2025.2 Ptg" href="https://www.seanmooney.info/blog/2025.2-ptg/">2025.2 Ptg</a>
         </h3>
-        <div class="archive-meta"><span title='2025-04-15 09:26:03 +0100 +0100'>April 15, 2025</span>&nbsp;·&nbsp;35 min&nbsp;·&nbsp;Sean Mooney</div>
+        <div class="archive-meta"><span title='2025-04-15 09:26:03 +0100 IST'>April 15, 2025</span>&nbsp;·&nbsp;<span>35 min</span>&nbsp;·&nbsp;<span>Sean Mooney</span></div>
         
         <a class="entry-link" aria-label="post link to 2025.2 Ptg" href="https://www.seanmooney.info/blog/2025.2-ptg/"></a>
       </div>
@@ -229,7 +251,7 @@
           
           <a aria-label="post link to what is openstack" href="https://www.seanmooney.info/blog/what-is-openstack/">what is openstack</a>
         </h3>
-        <div class="archive-meta"><span title='2017-02-05 18:51:40 +0000 UTC'>February 5, 2017</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;Sean Mooney</div>
+        <div class="archive-meta"><span title='2017-02-05 18:51:40 +0000 UTC'>February 5, 2017</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>Sean Mooney</span></div>
         
         <a class="entry-link" aria-label="post link to what is openstack" href="https://www.seanmooney.info/blog/what-is-openstack/"></a>
       </div>
@@ -254,9 +276,14 @@
 </a>
 
 <script>
-    let menu = document.getElementById('menu')
+    let menu = document.getElementById('menu');
     if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
         menu.onscroll = function () {
             localStorage.setItem("menu-scroll-position", menu.scrollLeft);
         }
@@ -297,11 +324,12 @@
 </script>
 <script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
             localStorage.setItem("pref-theme", 'light');
         } else {
-            document.body.classList.add('dark');
+            html.dataset.theme = 'dark';
             localStorage.setItem("pref-theme", 'dark');
         }
     })

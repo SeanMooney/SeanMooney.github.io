@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="dark">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Improving AI Review with AI Review | Today I learned</title>
+<meta name="keywords" content="ai, openstack, claude, agentic, development, ci, zuul">
+<meta name="description" content="Agentic Loops and How to Use Them
+Executive Summary
+Over the course of a few sessions with Claude Code, I took an existing multi-agent
+CI code review system and refactored it into a proper Claude Code plugin — complete
+with a marketplace definition, a /teim-review slash command for local use, and a
+single orchestration agent that replaced three separate Ansible-driven Claude
+invocations. The final commit was 26 files changed, 601 insertions, 397 deletions.">
+<meta name="author" content="Sean Mooney">
+<link rel="canonical" href="https://www.seanmooney.info/blog/agentic-ai-teim-review/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://www.seanmooney.info/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://www.seanmooney.info/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.seanmooney.info/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://www.seanmooney.info/apple-touch-icon.png">
+<link rel="mask-icon" href="https://www.seanmooney.info/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://www.seanmooney.info/blog/agentic-ai-teim-review/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+<link rel="stylesheet" href="/css/custom.css"><meta property="og:url" content="https://www.seanmooney.info/blog/agentic-ai-teim-review/">
+  <meta property="og:site_name" content="Today I learned">
+  <meta property="og:title" content="Improving AI Review with AI Review">
+  <meta property="og:description" content="Agentic Loops and How to Use Them Executive Summary Over the course of a few sessions with Claude Code, I took an existing multi-agent CI code review system and refactored it into a proper Claude Code plugin — complete with a marketplace definition, a /teim-review slash command for local use, and a single orchestration agent that replaced three separate Ansible-driven Claude invocations. The final commit was 26 files changed, 601 insertions, 397 deletions.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2026-03-27T10:00:00+01:00">
+    <meta property="article:modified_time" content="2026-03-27T10:00:00+01:00">
+    <meta property="article:tag" content="Ai">
+    <meta property="article:tag" content="Openstack">
+    <meta property="article:tag" content="Claude">
+    <meta property="article:tag" content="Agentic">
+    <meta property="article:tag" content="Development">
+    <meta property="article:tag" content="Ci">
+      <meta property="og:image" content="https://www.seanmooney.info/images/papermod-cover.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.seanmooney.info/images/papermod-cover.png">
+  <meta name="twitter:title" content="Improving AI Review with AI Review">
+  <meta name="twitter:description" content="Agentic Loops and How to Use Them Executive Summary Over the course of a few sessions with Claude Code, I took an existing multi-agent CI code review system and refactored it into a proper Claude Code plugin — complete with a marketplace definition, a /teim-review slash command for local use, and a single orchestration agent that replaced three separate Ansible-driven Claude invocations. The final commit was 26 files changed, 601 insertions, 397 deletions.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blogs",
+      "item": "https://www.seanmooney.info/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Improving AI Review with AI Review",
+      "item": "https://www.seanmooney.info/blog/agentic-ai-teim-review/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Improving AI Review with AI Review",
+  "name": "Improving AI Review with AI Review",
+  "description": "Agentic Loops and How to Use Them Executive Summary Over the course of a few sessions with Claude Code, I took an existing multi-agent CI code review system and refactored it into a proper Claude Code plugin — complete with a marketplace definition, a /teim-review slash command for local use, and a single orchestration agent that replaced three separate Ansible-driven Claude invocations. The final commit was 26 files changed, 601 insertions, 397 deletions.\n",
+  "keywords": [
+    "ai", "openstack", "claude", "agentic", "development", "ci", "zuul"
+  ],
+  "articleBody": "Agentic Loops and How to Use Them Executive Summary Over the course of a few sessions with Claude Code, I took an existing multi-agent CI code review system and refactored it into a proper Claude Code plugin — complete with a marketplace definition, a /teim-review slash command for local use, and a single orchestration agent that replaced three separate Ansible-driven Claude invocations. The final commit was 26 files changed, 601 insertions, 397 deletions.\nWhat made this interesting wasn’t the feature itself. It was the process. The tool we were building — an AI code reviewer — reviewed its own development iteratively across multiple sessions. Each review cycle produced a structured plan, plans were executed, and then the reviewer was turned back on the result. But the loop wasn’t just AI reviewing AI. It was an agent with access to the full engineering stack: linters, unit tests, molecule tests, and pre-commit hooks. The AI could verify its own work against objective reality, not just its own judgement. That closed quality gate is something I want to document here, because I think it represents a genuinely useful template for how to approach this kind of agentic development work.\nWhat Is teim-review? Setting the Context Before we get to the how, it helps to understand what we were working with and why.\nteim-review is an AI-powered code review system built for OpenStack development. It runs inside a Zuul CI job — specifically on my personal third-party Zuul instance at zuul.teim.app, which is part of my homelab setup — and uses Claude Code to analyse proposed changes, compare them against OpenStack coding standards, and post structured feedback back to Gerrit. The output is both a JSON findings file and a rendered HTML report that surfaces as a CI artifact.\nThe system lives in the openstack-ai-style-guide repository, which also contains the style guides themselves — quick-rules and a comprehensive guide — that inform the review.\nThe architecture before the change At the point we started this work, the system looked like this:\nzuul.d/jobs.yaml └── teim-code-review job └── playbooks/teim-code-review/run.yaml ├── role: ai_review_setup (configure Claude, set model mappings) ├── role: ai_code_review (invoke claude code → context extraction agent) ├── role: ai_code_review (invoke claude code → commit summary agent) ├── role: ai_code_review (invoke claude code → code review agent) ├── role: ai_html_generation (render JSON → HTML) └── role: ai_zuul_integration (post comments, register artifacts) Each ai_code_review role invocation was a separate claude CLI call — meaning Zuul was spinning up Claude three times, each time loading context from scratch. The model names in the agent definitions also referenced GLM model names directly, which made the agents tightly coupled to that specific homelab deployment.\nThe Ansible playbook was doing orchestration work — sequencing agents, passing outputs between them, handling retries — that really belonged inside a single Claude session.\nThe architecture after the change zuul.d/jobs.yaml └── teim-code-review job └── playbooks/teim-code-review/run.yaml ├── role: ai_review_setup (install plugin, configure Claude) ├── role: ai_code_review (invoke claude code → @teim-review-agent) │ │ │ ┌────────────────────┴────────────────────────┐ │ │ Single Claude session │ │ │ │ │ │ @zuul-context-extractor (haiku) │ │ │ ↓ │ │ │ @commit-summary (haiku) │ │ │ ↓ │ │ │ @project-guidelines-extractor (haiku) │ │ │ ↓ │ │ │ @code-review-agent (inherit) │ │ │ ↓ │ │ │ render_html_from_json.py │ │ └──────────────────────────────────────────────┘ ├── role: ai_html_generation (verify HTML artifact) └── role: ai_zuul_integration (post comments, register artifacts) One Ansible invocation, one Claude session, one coherent context shared across all the subagents. The orchestration logic moved from the playbook into the agent definition, where it belongs. And because the system is now a proper plugin, the same /teim-review slash command that runs in CI is available locally — no manual Ansible required.\nWhat prompted the change There were four specific things I wanted to fix:\nAgent definitions used deployment-specific model names. The agents referenced glm-5-turbo, glm-4.7, and glm-4.7-flash directly, which meant they’d break outside the homelab CI without editing. We needed to use Claude’s canonical model tier names (haiku, sonnet, opus, inherit) so the mapping could happen at configuration time. The CI job configures a ~/.claude/settings.json that maps each tier name to whatever model is available in the environment — GLM models in the homelab, or any other provider elsewhere. That means the hardcoded tier names in the agent definitions are effectively just defaults; the actual model used is determined at runtime by the settings file, and can be overridden without touching the agent definitions at all.\nThree Claude invocations instead of one. Every invocation is cold-start overhead. More importantly, agents running in separate sessions couldn’t share context naturally. A single orchestration agent handling the full pipeline in one session is more efficient and more coherent.\nNo way to run it locally. The review pipeline only existed as a Zuul job. If you wanted to run it on your local branch before pushing, you’d have to manually orchestrate the Ansible playbook. That’s not a workflow anyone was going to adopt.\nNot distributable as a plugin. The whole system was wired to a specific repo clone path in CI. There was no way for another project to install and use it without significant manual configuration.\nA Claude Code Primer: Skills, Subagents, Slash Commands, and Plugins If you’re new to Claude Code’s extensibility model, a quick orientation before we go further. This is one of the areas where terminology can get confusing quickly, especially if you’re used to VS Code extensions or similar systems.\nTL;DR: Think of it as a layered system — slash commands are the entry points, skills are packaged workflows, subagents are specialist collaborators, and plugins are the distribution mechanism that bundles all of the above.\nSlash commands A slash command (/teim-review) is the most explicit form of extension in Claude Code. You type it, Claude Code executes the associated skill or command definition. It’s an intentional trigger — nothing happens unless you invoke it.\nSkills A skill is a structured instruction file (conventionally named SKILL.md) that teaches Claude Code how to perform a specific workflow. It defines the trigger condition, required parameters, what tools are available, what output to produce, and where to put it. When a skill is installed via a plugin, its slash command becomes available in your session.\nThe key distinction from a bare slash command: a skill is self-describing. It includes enough context about when and how to use it that Claude can activate it appropriately, and it carries configuration that shapes the tool invocations it makes.\nSubagents A subagent (or agent) is a markdown file in an agents/ directory that defines a specialist role. When Claude Code (or another agent) invokes it via @agent-name, it gets its own execution context with a specific system prompt, model assignment, and tool permissions. Subagents are how you decompose a complex pipeline into focused, reusable pieces.\nThe analogy that works well: subagents are like library functions. You define them once, give them a clear contract (input → output), and call them from anywhere. The orchestrating agent doesn’t need to know how they work internally.\nPlugins and the marketplace: Git-as-a-Registry This is where the distribution model gets interesting, and where I think the framing of “marketplace” can mislead people. This isn’t a store. It’s git-as-a-registry.\nA plugin bundles related skills, agents, hooks, and MCP servers into a distributable unit with a plugin.json at the repo root. A marketplace is a marketplace.json that acts as a catalogue — you point Claude Code at any git repository and it becomes a source of installable tools. The tools live in the repo; the marketplace manifest is just the index.\nclaude plugin marketplace add /path/to/openstack-ai-style-guide claude plugin install teim-review@openstack-ai-style-guide Or, once the marketplace is registered, you can browse and install directly from within Claude Code using the built-in /plugins command — no CLI required.\nAfter that, /teim-review is available in any session, @teim-review-agent is callable from other agents, and everything is version-tracked alongside the source repo. When the repo updates, the plugin updates.\nThe DX benefit for humans is real: no manual file copying, no PATH configuration, no “clone this repo and source that script.” But the CI benefit is just as significant. What was previously several manual steps — clone the style guide repo, configure model mappings in ~/.claude/settings.json, symlink the agents directory — became a single versioned command in the Ansible playbook. The ai_review_setup role went from bespoke configuration logic to a clean two-liner: marketplace add, then plugin install. The tool installation is now auditable, reproducible, and as easy to update as bumping a branch ref.\nIf you’ve built internal tooling before, you’ll recognise the pattern: the goal is to make the right way to use your tools also the easy way. Plugins get you there for Claude Code tooling.\nThe How: Starting with the Prompt Here is the complete initial prompt I gave Claude Code to kick off this work. I’ve left it exactly as I typed it — typos, run-on sentences, and all. That’s deliberate, and it matters.\ncurrently i have a number of agent in this repo @agents/ that are orcrestated by ansible @playbooks/ as part of a zuul ci job @zuul.d/ . in the ci job we configure claude by redefining the defautl haiku, sonnet and opus names and for rubustness we also override the model when we invoke claude code explcity on the command line. i want to make several optimisations and enhancments to how this works. first i would like the existing sub agent to not use the glm names, we should either update the defintions to inherit or use the calude equivlent names. second i would like to create a teim-review subagent or skill that will intelegently orchestrate teh exisitng subagents. effectivly i want the skill or subagent to be usabel locally or in ci allowing it to replace the exisitng ansible orchestration so we do not need to invoke claude multiple times. this new skill would instaead detect if we are runing in zuul or if we are invoking it localy to do review and either genreate the zuul contex or review the current repo instead. then it shoudl gather context form the commit message and repo usign the exisng sub agents and finally invoke teh review subagent optionally it would be nice if we coudl ask the skill/subagent to generate teh same html report as the ci job and json finding file in a .teim-reivew subfolder when locally or in a location specifed in the promt when invokeing the subagent/skill lets reason about how to do this interactivly before we proceed to the implemation i would also like to enable the current repo to be used as a plugin and market place the ci job should continue to functon troughut this porcess as it will use the updated defietion to review the propsoed change when we submit it as a pr. so we will need to adtap the zuul job to work with the new plugin/marketpalce layout and also update the way we enabel the skills/subagent before we invoke claude in the zuul job. once we have tested the changes locally and pushed a pr for review i will also take the review feedback and any error taht are found in the output fo the job and we will use that to refien the impelatin futuer in a seperate sesssion. note that before we proceed to that initall push and refinement loop all pre-commit and local tests shoudl be exectued and any linitn issues adressed as those will also be enfoced in ci and they provide valable quality gates during this refactor and feature devlopement. we also need to update the repos docuementiaon comprehsnivley for this work. That prompt produced a detailed, targeted implementation plan covering 26 files, with the correct model tier strategy, the right plugin schema, and a working CI integration — on the first planning pass. Here’s why it worked.\nStructure of intent, not structure of prose The model doesn’t care about your spelling. What it needs is a clear picture of what you want, what already exists, and what cannot change. This prompt delivers all three, with no polish whatsoever.\n@agents/, @playbooks/, @zuul.d/ — these are the most important characters in the prompt. In Claude Code, the @ prefix is a live context reference. Rather than pasting 900 lines of Ansible YAML into the conversation, I pointed at the source directly. Claude Code loaded and understood the existing architecture before generating a single line of plan. The model’s understanding of the codebase was grounded in the actual current state of those files, not in my description of them. That’s the difference between contextual grounding and paraphrasing.\nRequired vs. optional, stated explicitly — “first… second…” sets the hard requirements. “Optionally it would be nice…” marks what can be deferred. This distinction propagates through the planning phase. The model won’t trade backward compatibility for an optional HTML report. You’ve told it the hierarchy.\n“lets reason about how to do this interactivly before we proceed to the implemation” — This single line is load-bearing. It’s an explicit instruction to enter a planning loop before touching any code. It’s the difference between an agent that plans and an agent that acts. I’ll come back to why this habit is one of the most valuable things you can build.\nBackward compatibility as a hard constraint — “the ci job should continue to functon troughut this porcess.” Not aspirational. Not a preference. A constraint. When this is stated explicitly, the planning system evaluates every proposed change against it. Unstated constraints get optimised away.\nStaged delivery acknowledged upfront — “once we have tested the changes locally and pushed a pr for review i will also take the review feedback… in a seperate sesssion.” This scopes the session. The model isn’t trying to solve three iterations of refinement in one go. It has a clear definition of done.\nThe takeaway isn’t that you should write better prompts. It’s that you should write prompts with structure of intent and contextual grounding. The typos are irrelevant. The architecture they’re describing isn’t.\nPlan Mode: The Iterative Planning Loop TL;DR: Start every non-trivial task in plan mode. Separating “understand and plan” from “execute” is one of the highest-leverage habits in agentic development.\nClaude Code’s plan mode is a read-only phase where the model explores the codebase, asks clarifying questions, and produces a structured implementation plan — without touching a single file. Only after you approve the plan does execution begin.\nMost AI coding tools now have some equivalent of this concept. The specific name and interaction model varies, but the underlying principle is consistent across the ecosystem: separate understanding from execution. Jumping straight to implementation is tempting, especially for tasks that feel straightforward. Resist it. The planning phase is where ambiguities surface cheaply, before they become bugs or rework.\nWhat emerged from the planning phase here was a structured document that identified exactly which files to change, what changes to make in each, the order of operations, and a verification checklist. A representative excerpt from the v1 plan:\nDesign constraint: Claude Code resolves a subagent’s model from its own model: frontmatter — the orchestrating agent cannot override it at call time. So model assignment must live in the individual agent definitions.\nThat’s a non-obvious architectural constraint that would have caused confusion mid-implementation without the planning phase to surface it. The plan also identified the two-tier model strategy: lightweight extraction agents (zuul-context-extractor, commit-summary, project-guidelines-extractor) should use model: haiku — mapping to a fast, cost-efficient GLM model in the homelab CI — while code-review-agent should inherit the session model. That’s the power of inherit: in CI it resolves to whatever flagship model the job is configured with (GLM-5 or GLM-5-turbo in this case), while locally it resolves to whatever model is active in your Claude Code session — Opus, Sonnet, or anything else. The agent definition doesn’t change; the capability scales with the context it’s running in. That decision came out of the planning conversation, not the initial prompt.\nThe full v1 plan is available here if you want to see what a complete planning output looks like for a change of this scope.\nSelf-Reinforcing Review: The Closed Quality Gate This is the part I find most interesting to reflect on, and I want to be specific about what “self-reinforcing” actually means here — because it’s broader than AI reviewing AI.\nOnce the v1 implementation was in place, the development loop looked like this:\nimplement changes ↓ pre-commit hooks (ruff, markdownlint, ansible-lint, license headers) ↓ unit tests (stestr) + molecule tests (role testing) ↓ /teim-review (AI code review against OpenStack standards) ↓ triage findings → plan fixes → implement → repeat The key is that the agent wasn’t just asking itself “does this look right?” It had access to linters that enforced objective rules, unit tests that verified behaviour, and molecule tests that exercised the Ansible roles in a real environment. When a pre-commit hook failed, that was a hard signal — not a suggestion. When a unit test broke, the agent knew exactly what it had changed that caused it.\nThe AI code review was one layer in a quality gate ecosystem, not the whole gate. And that’s the right framing for this kind of work generally. An AI reviewer is excellent at catching design smells, architectural inconsistencies, missing documentation, and patterns that violate project conventions. It is not a substitute for a test suite that exercises the actual behaviour. They’re complementary, and the combination is significantly more valuable than either alone.\nWith that context, here’s how the review loop played out.\nThe v1 report The first self-review produced this HTML report:\n0 Critical 1 High — SKILL.md was missing json_schema and tools_dir parameter documentation, meaning local invocations relied on implicit defaults not visible to users 3 Warnings — plugin.json lacking explicit directory fields, unconditional changed_when: true in an Ansible role (idempotency violation), stale reference to a deleted role in the docs 4 Suggestions — template placeholders, undocumented model strategy, HTML artifact placement, fragile regex in post-tasks The overall assessment was “ready with minor fixes.” That’s a reasonable first-pass outcome for a feature that introduced 24 changed files. The pre-commit and unit test gates had already caught the mechanical issues; the AI review was surfacing design and documentation gaps.\nTriaging findings: signal vs noise Not all findings are equal, and one of the key skills in working with AI reviewers is developing judgment about what’s a genuine issue versus a false positive. This is where domain knowledge becomes the deciding vote.\nWhen I brought the v1 report findings into the next session, the exchange went roughly like this:\nMe: lets plan how to adress the new findign iteritively for the first high item this is a false positive lets not it in the AGENTS.md so it is not hilighted again. auto discovery is supproted adn adding agents and skill to the plugin.json is only required if not using the defualt locations. ask me clarifing question on how to proceed with the other finding\nThat fragment captures the pattern well. I identified which finding was a false positive and why — auto-discovery is the default; explicit directory fields in plugin.json are only needed for non-standard layouts. I told Claude where to document this to suppress future false positives. And I explicitly asked for clarifying questions rather than letting the model guess at how to handle the remaining findings.\nThe v2 plan that resulted triaged 8 findings with explicit classifications:\nplugin.json missing agents_dir/skills_dir → False positive. Auto-discovery is the default. Document in HACKING.rst. changed_when: true unconditional → Genuine. Ansible idempotency violation. Fix the task conditions. Stale ai_context_extraction reference in docs → Genuine. Update to describe the current flow. HTML script copied to home directory → Genuine. As I put it at the time: “it ideally would not be copied at all but instead executed via the fully qualifed path. the git repo will be cloned in the ci job in a well know localtion and we also knwo the location of the plugin so we can use the plugin dir info to constuct the fully qualifed path and invoke the tool direclty skiping the copy and cleanup entirly” That last one is a good example of domain knowledge flowing back into the implementation. The reviewer flagged a smell; I knew the architectural solution because I knew the deployment constraints. The reviewer and the engineer each contributed what the other couldn’t.\nThe v2 plan and v3 plan are available if you want to see how the triage and refinement were structured across iterations.\nThe v2 report After addressing the genuine v1 findings, a second self-review produced this report:\n0 Critical 2 High — plugin install tasks in ai_review_setup had no failure handling (newly identified), and the SKILL.md schema path issue correctly elevated from suggestion to High 3 Warnings 4 Suggestions The move from 1 High to 2 High might look like regression. It isn’t. One finding was newly identified (the failure handling gap), and one was correctly elevated in severity. The overall quality of the codebase improved between v1 and v2; the reviewer just got a more thorough look at it second time around.\nThe v2 assessment: “Approve with comments; fix High issues before merge.” That’s exactly the kind of output you want — not a block, but a clear signal of what needs attention before the change lands.\nHACKING.rst as an artifact of the process One output of the refinement loop worth highlighting is HACKING.rst. This file didn’t exist before this feature. It emerged from the need to document patterns the AI reviewer was correctly flagging as unusual but that were intentional:\nPlugin manifest has no explicit agents_dir/skills_dir — auto-discovery is the default Ansible variable cross-references in defaults/main.yaml — valid pattern, resolved at play time regex_search with default/fallback guards — intentional safety handling for empty stdout When your automated reviewer produces false positives, don’t suppress them silently. Document why the pattern is intentional. Future contributors and future reviewers — human or AI — benefit from understanding the reasoning. HACKING.rst is the right place for exactly this kind of project-specific exception documentation.\nFrom First Plan to Merged Commit: The Evolution The commit history tells the broader story of how this system developed before the plugin refactor:\nee59ccc Add teim-review plugin, skill, and orchestration agent ← merged commit 63c018d Enhance code-review-agent with security and maintainability guidance 9b3c1a7 Add two-tier confidence routing and fix agent/schema alignment 0d630d8 Improve review signal quality based on reviewer feedback analysis e125a1b Add semaphore to limit teim-code-review concurrency to 1 54ac296 teim-code-review: use glm-5-turbo as opus/reviewer model 10ec918 update model tier mappings to GLM 5/4.7/4.7-flash e84e2be Add test harness with unit tests, molecule tests, and linting 8a1107d Add structured output and JSON validation for reliable review reports The plugin refactor was the culmination of a longer arc. Structured output and JSON schema validation came first — you can’t reliably parse AI output without that. A proper test harness came after. Model tier mappings were tuned. Review signal quality was improved based on real feedback from human reviewers on actual patches.\nThat order matters. You can’t productively refactor something you don’t understand, and you shouldn’t refactor something you can’t verify. Each earlier commit was either adding capability needed for the refactor, or building confidence in what the system was actually doing before changing how it was wired together.\nThe final plugin commit touched 26 files, added 601 lines, and removed 397:\nNew: .claude-plugin/plugin.json and marketplace.json — the distribution layer New: agents/teim-review-agent.md — single orchestration agent replacing multi-step Ansible orchestration New: skills/teim-review/SKILL.md — the /teim-review slash command New: HACKING.rst — documented false-positive patterns Updated: ai_review_setup role — now installs the plugin via claude plugin install rather than manually configuring agent paths Updated: ai_code_review role — now invokes a single teim-review-agent call rather than multiple sequential agent calls Removed: ai_context_extraction role — its functionality absorbed into teim-review-agent Updated: All lightweight agents — model: inherit → model: haiku Key Takeaways / Lessons Learned Always start in plan mode — or the equivalent.\nThe line “lets reason about how to do this interactivly before we proceed” did more work than anything else in that initial prompt. It forced a shared understanding of the architecture before a single file was touched. Whatever tool you’re using, find the plan/spec/architect mode and use it by default for anything non-trivial. The discipline of separating understanding from execution is where most of the value in agentic development comes from.\nGround your prompts in the actual code, not your description of it.\n@agents/, @playbooks/, @zuul.d/ — live references, not copy-pasted YAML. The model’s understanding of the codebase should be built from the actual current state of the files, not from your summary of them. Summaries drift. Files don’t. Use @ references to give the agent contextual grounding, and it will plan against reality rather than against your memory of reality.\nStructure of intent is what matters, not grammatical structure.\nEvery message I sent throughout this work was written quickly, with typos, in stream-of-consciousness style. The prompt you read above produced a 26-file implementation plan. The effectiveness came from having a clear structure of intent: what was required, what was optional, what constraints applied, what was out of scope for this session. None of that requires polish. It requires clarity about what you actually want.\nExplicitly scope what you’re delegating.\n“Ask me clarifying questions on how to proceed with the other findings” is a powerful pattern. It keeps you in the loop for decisions that need your domain knowledge, while letting the model handle the mechanical work. The alternative — letting the model infer all decisions — leads to implementations that are internally consistent but disconnected from your actual constraints.\nThe AI reviewer is one layer in a quality gate, not the whole gate.\nThe self-reinforcing loop in this work wasn’t just AI reviewing AI. It was an agent with access to linters, unit tests, and molecule tests that could verify its own work against objective signals. Design your quality gate with that in mind: pre-commit hooks for mechanical correctness, a test suite for behavioural verification, and an AI reviewer for design and convention alignment. They’re complementary. Don’t ask the AI reviewer to do the job of the test suite.\nDevelop judgment about false positives early.\nAn AI code reviewer will flag things that look unusual. Some flags are correct. Some are false positives from patterns the model hasn’t seen in the right context. Developing the ability to quickly distinguish between “this is a genuine issue” and “this is expected behaviour that needs documentation” is a skill that improves with practice. When you identify a false positive, document it — don’t just move on.\nRight model for the task.\nUsing haiku for context extraction and inherit for the actual code review is not a premature optimisation. In CI, extraction agents run many times per day across multiple projects. The cost difference between flash-tier and flagship models is an order of magnitude. Design your model assignment strategy deliberately — don’t default everything to the most capable model just because it’s available.\nThe iterative loop is the development model.\nPlan → implement → verify (linters, tests, AI review) → triage findings → plan fixes → implement → repeat. This is not overhead on top of development. This is the development model when working with agentic AI. Each cycle is faster than the last because the codebase improves, the quality gates get better calibrated, and you develop better intuition for what to delegate and what to hold.\nReferences and Further Reading Claude Code documentation:\nClaude Code overview Extending Claude with skills Plugin format reference Creating and distributing plugin marketplaces Agentic workflows and best practices:\nMy LLM coding workflow going into 2026 — Addy Osmani Claude Code best practices for agentic coding Mastering Claude Code plan mode Claude Code customisation: CLAUDE.md, slash commands, skills, and subagents Session artefacts from this work:\nv1 implementation plan v2 refinement plan v3 final refinement plan v1 self-review report v2 self-review report openstack-ai-style-guide repository If you’re experimenting with agentic AI in your own CI pipelines or want to dig into the teim-review implementation, the style guide repo is public. Feel free to reach out on IRC (sean-k-mooney) or through the usual OpenStack channels.\n",
+  "wordCount" : "4707",
+  "inLanguage": "en",
+  "image": "https://www.seanmooney.info/images/papermod-cover.png","datePublished": "2026-03-27T10:00:00+01:00",
+  "dateModified": "2026-03-27T10:00:00+01:00",
+  "author":{
+    "@type": "Person",
+    "name": "Sean Mooney"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.seanmooney.info/blog/agentic-ai-teim-review/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Today I learned",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.seanmooney.info/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://www.seanmooney.info/" accesskey="h" title="Today I learned (Alt + H)">Today I learned</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://www.seanmooney.info/blog" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.seanmooney.info/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.seanmooney.info/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.seanmooney.info/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://www.seanmooney.info/">Home</a>&nbsp;»&nbsp;<a href="https://www.seanmooney.info/blog/">Blogs</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Improving AI Review with AI Review
+    </h1>
+    <div class="post-meta"><span title='2026-03-27 10:00:00 +0100 +0100'>March 27, 2026</span>&nbsp;·&nbsp;<span>23 min</span>&nbsp;·&nbsp;<span>Sean Mooney</span>&nbsp;|&nbsp;<span>
+    <a href="https://github.com/SeanMooney/seanmooney.info/tree/master/content/blog/agentic-ai-teim-review.md" rel="noopener noreferrer edit" target="_blank">Suggest Changes</a>
+</span>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#agentic-loops-and-how-to-use-them" aria-label="Agentic Loops and How to Use Them">Agentic Loops and How to Use Them</a><ul>
+                        
+                <li>
+                    <a href="#executive-summary" aria-label="Executive Summary">Executive Summary</a></li>
+                <li>
+                    <a href="#what-is-teim-review-setting-the-context" aria-label="What Is teim-review? Setting the Context">What Is teim-review? Setting the Context</a><ul>
+                        
+                <li>
+                    <a href="#the-architecture-before-the-change" aria-label="The architecture before the change">The architecture before the change</a></li>
+                <li>
+                    <a href="#the-architecture-after-the-change" aria-label="The architecture after the change">The architecture after the change</a></li>
+                <li>
+                    <a href="#what-prompted-the-change" aria-label="What prompted the change">What prompted the change</a></li></ul>
+                </li>
+                <li>
+                    <a href="#a-claude-code-primer-skills-subagents-slash-commands-and-plugins" aria-label="A Claude Code Primer: Skills, Subagents, Slash Commands, and Plugins">A Claude Code Primer: Skills, Subagents, Slash Commands, and Plugins</a><ul>
+                        
+                <li>
+                    <a href="#slash-commands" aria-label="Slash commands">Slash commands</a></li>
+                <li>
+                    <a href="#skills" aria-label="Skills">Skills</a></li>
+                <li>
+                    <a href="#subagents" aria-label="Subagents">Subagents</a></li>
+                <li>
+                    <a href="#plugins-and-the-marketplace-git-as-a-registry" aria-label="Plugins and the marketplace: Git-as-a-Registry">Plugins and the marketplace: Git-as-a-Registry</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-how-starting-with-the-prompt" aria-label="The How: Starting with the Prompt">The How: Starting with the Prompt</a><ul>
+                        
+                <li>
+                    <a href="#structure-of-intent-not-structure-of-prose" aria-label="Structure of intent, not structure of prose">Structure of intent, not structure of prose</a></li></ul>
+                </li>
+                <li>
+                    <a href="#plan-mode-the-iterative-planning-loop" aria-label="Plan Mode: The Iterative Planning Loop">Plan Mode: The Iterative Planning Loop</a></li>
+                <li>
+                    <a href="#self-reinforcing-review-the-closed-quality-gate" aria-label="Self-Reinforcing Review: The Closed Quality Gate">Self-Reinforcing Review: The Closed Quality Gate</a><ul>
+                        
+                <li>
+                    <a href="#the-v1-report" aria-label="The v1 report">The v1 report</a></li>
+                <li>
+                    <a href="#triaging-findings-signal-vs-noise" aria-label="Triaging findings: signal vs noise">Triaging findings: signal vs noise</a></li>
+                <li>
+                    <a href="#the-v2-report" aria-label="The v2 report">The v2 report</a></li>
+                <li>
+                    <a href="#hackingrst-as-an-artifact-of-the-process" aria-label="HACKING.rst as an artifact of the process">HACKING.rst as an artifact of the process</a></li></ul>
+                </li>
+                <li>
+                    <a href="#from-first-plan-to-merged-commit-the-evolution" aria-label="From First Plan to Merged Commit: The Evolution">From First Plan to Merged Commit: The Evolution</a></li>
+                <li>
+                    <a href="#key-takeaways--lessons-learned" aria-label="Key Takeaways / Lessons Learned">Key Takeaways / Lessons Learned</a></li>
+                <li>
+                    <a href="#references-and-further-reading" aria-label="References and Further Reading">References and Further Reading</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="agentic-loops-and-how-to-use-them">Agentic Loops and How to Use Them<a hidden class="anchor" aria-hidden="true" href="#agentic-loops-and-how-to-use-them">#</a></h1>
+<h2 id="executive-summary">Executive Summary<a hidden class="anchor" aria-hidden="true" href="#executive-summary">#</a></h2>
+<p>Over the course of a few sessions with Claude Code, I took an existing multi-agent
+CI code review system and refactored it into a proper Claude Code plugin — complete
+with a marketplace definition, a <code>/teim-review</code> slash command for local use, and a
+single orchestration agent that replaced three separate Ansible-driven Claude
+invocations. The final commit was 26 files changed, 601 insertions, 397 deletions.</p>
+<p>What made this interesting wasn&rsquo;t the feature itself. It was the process. The tool we
+were building — an AI code reviewer — reviewed its own development iteratively across
+multiple sessions. Each review cycle produced a structured plan, plans were executed,
+and then the reviewer was turned back on the result. But the loop wasn&rsquo;t just AI
+reviewing AI. It was an agent with access to the full engineering stack: linters,
+unit tests, molecule tests, and pre-commit hooks. The AI could verify its own work
+against objective reality, not just its own judgement. That closed quality gate is
+something I want to document here, because I think it represents a genuinely useful
+template for how to approach this kind of agentic development work.</p>
+<hr>
+<h2 id="what-is-teim-review-setting-the-context">What Is teim-review? Setting the Context<a hidden class="anchor" aria-hidden="true" href="#what-is-teim-review-setting-the-context">#</a></h2>
+<p>Before we get to the how, it helps to understand what we were working with and why.</p>
+<p><strong>teim-review</strong> is an AI-powered code review system built for OpenStack development.
+It runs inside a Zuul CI job — specifically on my personal third-party Zuul instance
+at <a href="https://zuul.teim.app/t/main/builds">zuul.teim.app</a>, which is part of my homelab
+setup — and uses Claude Code to analyse proposed changes, compare them against
+OpenStack coding standards, and post structured feedback back to Gerrit. The output
+is both a JSON findings file and a rendered HTML report that surfaces as a CI
+artifact.</p>
+<p>The system lives in the
+<a href="https://github.com/SeanMooney/openstack-ai-style-guide">openstack-ai-style-guide</a>
+repository, which also contains the style guides themselves — quick-rules and a
+comprehensive guide — that inform the review.</p>
+<h3 id="the-architecture-before-the-change">The architecture before the change<a hidden class="anchor" aria-hidden="true" href="#the-architecture-before-the-change">#</a></h3>
+<p>At the point we started this work, the system looked like this:</p>
+<pre tabindex="0"><code>zuul.d/jobs.yaml
+    └── teim-code-review job
+         └── playbooks/teim-code-review/run.yaml
+              ├── role: ai_review_setup     (configure Claude, set model mappings)
+              ├── role: ai_code_review      (invoke claude code → context extraction agent)
+              ├── role: ai_code_review      (invoke claude code → commit summary agent)
+              ├── role: ai_code_review      (invoke claude code → code review agent)
+              ├── role: ai_html_generation  (render JSON → HTML)
+              └── role: ai_zuul_integration (post comments, register artifacts)
+</code></pre><p>Each <code>ai_code_review</code> role invocation was a separate <code>claude</code> CLI call — meaning
+Zuul was spinning up Claude three times, each time loading context from scratch. The
+model names in the agent definitions also referenced GLM model names directly, which
+made the agents tightly coupled to that specific homelab deployment.</p>
+<p>The Ansible playbook was doing orchestration work — sequencing agents, passing outputs
+between them, handling retries — that really belonged inside a single Claude session.</p>
+<h3 id="the-architecture-after-the-change">The architecture after the change<a hidden class="anchor" aria-hidden="true" href="#the-architecture-after-the-change">#</a></h3>
+<pre tabindex="0"><code>zuul.d/jobs.yaml
+    └── teim-code-review job
+         └── playbooks/teim-code-review/run.yaml
+              ├── role: ai_review_setup     (install plugin, configure Claude)
+              ├── role: ai_code_review      (invoke claude code → @teim-review-agent)
+              │                              │
+              │         ┌────────────────────┴────────────────────────┐
+              │         │       Single Claude session                  │
+              │         │                                              │
+              │         │  @zuul-context-extractor  (haiku)           │
+              │         │       ↓                                      │
+              │         │  @commit-summary          (haiku)           │
+              │         │       ↓                                      │
+              │         │  @project-guidelines-extractor (haiku)      │
+              │         │       ↓                                      │
+              │         │  @code-review-agent       (inherit)         │
+              │         │       ↓                                      │
+              │         │  render_html_from_json.py                   │
+              │         └──────────────────────────────────────────────┘
+              ├── role: ai_html_generation  (verify HTML artifact)
+              └── role: ai_zuul_integration (post comments, register artifacts)
+</code></pre><p>One Ansible invocation, one Claude session, one coherent context shared across all
+the subagents. The orchestration logic moved from the playbook into the agent
+definition, where it belongs. And because the system is now a proper plugin, the same
+<code>/teim-review</code> slash command that runs in CI is available locally — no manual
+Ansible required.</p>
+<h3 id="what-prompted-the-change">What prompted the change<a hidden class="anchor" aria-hidden="true" href="#what-prompted-the-change">#</a></h3>
+<p>There were four specific things I wanted to fix:</p>
+<ol>
+<li>
+<p><strong>Agent definitions used deployment-specific model names.</strong> The agents referenced
+<code>glm-5-turbo</code>, <code>glm-4.7</code>, and <code>glm-4.7-flash</code> directly, which meant they&rsquo;d break
+outside the homelab CI without editing. We needed to use Claude&rsquo;s canonical model
+tier names (<code>haiku</code>, <code>sonnet</code>, <code>opus</code>, <code>inherit</code>) so the mapping could happen at
+configuration time. The CI job configures a <code>~/.claude/settings.json</code> that maps
+each tier name to whatever model is available in the environment — GLM models in
+the homelab, or any other provider elsewhere. That means the hardcoded tier names
+in the agent definitions are effectively just defaults; the actual model used is
+determined at runtime by the settings file, and can be overridden without touching
+the agent definitions at all.</p>
+</li>
+<li>
+<p><strong>Three Claude invocations instead of one.</strong> Every invocation is cold-start
+overhead. More importantly, agents running in separate sessions couldn&rsquo;t share
+context naturally. A single orchestration agent handling the full pipeline in one
+session is more efficient and more coherent.</p>
+</li>
+<li>
+<p><strong>No way to run it locally.</strong> The review pipeline only existed as a Zuul job. If
+you wanted to run it on your local branch before pushing, you&rsquo;d have to manually
+orchestrate the Ansible playbook. That&rsquo;s not a workflow anyone was going to adopt.</p>
+</li>
+<li>
+<p><strong>Not distributable as a plugin.</strong> The whole system was wired to a specific repo
+clone path in CI. There was no way for another project to install and use it
+without significant manual configuration.</p>
+</li>
+</ol>
+<hr>
+<h2 id="a-claude-code-primer-skills-subagents-slash-commands-and-plugins">A Claude Code Primer: Skills, Subagents, Slash Commands, and Plugins<a hidden class="anchor" aria-hidden="true" href="#a-claude-code-primer-skills-subagents-slash-commands-and-plugins">#</a></h2>
+<p>If you&rsquo;re new to Claude Code&rsquo;s extensibility model, a quick orientation before we
+go further. This is one of the areas where terminology can get confusing quickly,
+especially if you&rsquo;re used to VS Code extensions or similar systems.</p>
+<p><strong>TL;DR:</strong> Think of it as a layered system — slash commands are the entry points,
+skills are packaged workflows, subagents are specialist collaborators, and plugins
+are the distribution mechanism that bundles all of the above.</p>
+<h3 id="slash-commands">Slash commands<a hidden class="anchor" aria-hidden="true" href="#slash-commands">#</a></h3>
+<p>A slash command (<code>/teim-review</code>) is the most explicit form of extension in Claude
+Code. You type it, Claude Code executes the associated skill or command definition.
+It&rsquo;s an intentional trigger — nothing happens unless you invoke it.</p>
+<h3 id="skills">Skills<a hidden class="anchor" aria-hidden="true" href="#skills">#</a></h3>
+<p>A <strong>skill</strong> is a structured instruction file (conventionally named <code>SKILL.md</code>) that
+teaches Claude Code how to perform a specific workflow. It defines the trigger
+condition, required parameters, what tools are available, what output to produce, and
+where to put it. When a skill is installed via a plugin, its slash command becomes
+available in your session.</p>
+<p>The key distinction from a bare slash command: a skill is self-describing. It
+includes enough context about <em>when</em> and <em>how</em> to use it that Claude can activate it
+appropriately, and it carries configuration that shapes the tool invocations it makes.</p>
+<h3 id="subagents">Subagents<a hidden class="anchor" aria-hidden="true" href="#subagents">#</a></h3>
+<p>A <strong>subagent</strong> (or agent) is a markdown file in an <code>agents/</code> directory that defines
+a specialist role. When Claude Code (or another agent) invokes it via <code>@agent-name</code>,
+it gets its own execution context with a specific system prompt, model assignment, and
+tool permissions. Subagents are how you decompose a complex pipeline into focused,
+reusable pieces.</p>
+<p>The analogy that works well: subagents are like library functions. You define them
+once, give them a clear contract (input → output), and call them from anywhere. The
+orchestrating agent doesn&rsquo;t need to know how they work internally.</p>
+<h3 id="plugins-and-the-marketplace-git-as-a-registry">Plugins and the marketplace: Git-as-a-Registry<a hidden class="anchor" aria-hidden="true" href="#plugins-and-the-marketplace-git-as-a-registry">#</a></h3>
+<p>This is where the distribution model gets interesting, and where I think the framing
+of &ldquo;marketplace&rdquo; can mislead people. This isn&rsquo;t a store. It&rsquo;s <strong>git-as-a-registry</strong>.</p>
+<p>A <strong>plugin</strong> bundles related skills, agents, hooks, and MCP servers into a
+distributable unit with a <code>plugin.json</code> at the repo root. A <strong>marketplace</strong> is a
+<code>marketplace.json</code> that acts as a catalogue — you point Claude Code at any git
+repository and it becomes a source of installable tools. The tools live in the repo;
+the marketplace manifest is just the index.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">claude plugin marketplace add /path/to/openstack-ai-style-guide
+</span></span><span class="line"><span class="cl">claude plugin install teim-review@openstack-ai-style-guide
+</span></span></code></pre></div><p>Or, once the marketplace is registered, you can browse and install directly from
+within Claude Code using the built-in <code>/plugins</code> command — no CLI required.</p>
+<p>After that, <code>/teim-review</code> is available in any session, <code>@teim-review-agent</code> is
+callable from other agents, and everything is version-tracked alongside the source
+repo. When the repo updates, the plugin updates.</p>
+<p>The DX benefit for humans is real: no manual file copying, no PATH configuration, no
+&ldquo;clone this repo and source that script.&rdquo; But the CI benefit is just as significant.
+What was previously several manual steps — clone the style guide repo, configure
+model mappings in <code>~/.claude/settings.json</code>, symlink the agents directory — became a
+single versioned command in the Ansible playbook. The <code>ai_review_setup</code> role went
+from bespoke configuration logic to a clean two-liner: <code>marketplace add</code>, then
+<code>plugin install</code>. The tool installation is now auditable, reproducible, and as easy
+to update as bumping a branch ref.</p>
+<p>If you&rsquo;ve built internal tooling before, you&rsquo;ll recognise the pattern: the goal is
+to make the right way to use your tools also the easy way. Plugins get you there for
+Claude Code tooling.</p>
+<hr>
+<h2 id="the-how-starting-with-the-prompt">The How: Starting with the Prompt<a hidden class="anchor" aria-hidden="true" href="#the-how-starting-with-the-prompt">#</a></h2>
+<p>Here is the complete initial prompt I gave Claude Code to kick off this work. I&rsquo;ve
+left it exactly as I typed it — typos, run-on sentences, and all. That&rsquo;s deliberate,
+and it matters.</p>
+<pre tabindex="0"><code>currently i have a number of agent in this repo @agents/ that are orcrestated by
+ansible @playbooks/ as part of a zuul ci job @zuul.d/ . in the ci job we configure
+claude by redefining the defautl haiku, sonnet and opus names and for rubustness we
+also override the model when we invoke claude code explcity on the command line.
+i want to make several optimisations and enhancments to how this works.
+
+first i would like the existing sub agent to not use the glm names, we should either
+update the defintions to inherit or use the calude equivlent names.
+second i would like to create a teim-review subagent or skill that will intelegently
+orchestrate teh exisitng subagents.
+effectivly i want the skill or subagent to be usabel locally or in ci allowing it to
+replace the exisitng ansible orchestration so we do not need to invoke claude multiple
+times.
+this new skill would instaead detect if we are runing in zuul or if we are invoking
+it localy to do review and either genreate the zuul contex or review the current
+repo instead.
+then it shoudl gather context form the commit message and repo usign the exisng sub
+agents and finally invoke teh review subagent
+
+optionally it would be nice if we coudl ask the skill/subagent to generate teh same
+html report as the ci job and json finding file in a .teim-reivew subfolder when
+locally or in a location specifed in the promt when invokeing the subagent/skill
+
+lets reason about how to do this interactivly before we proceed to the implemation
+
+i would also like to enable the current repo to be used as a plugin and market place
+
+the ci job should continue to functon troughut this porcess as it will use the
+updated defietion to review the propsoed change when we submit it as a pr.
+so we will need to adtap the zuul job to work with the new plugin/marketpalce layout
+and also update the way we enabel the skills/subagent before we invoke claude in the
+zuul job.
+
+once we have tested the changes locally and pushed a pr for review i will also take
+the review feedback and any error taht are found in the output fo the job and we will
+use that to refien the impelatin futuer in a seperate sesssion.
+
+note that before we proceed to that initall push and refinement loop all pre-commit
+and local tests shoudl be exectued and any linitn issues adressed as those will also
+be enfoced in ci and they provide valable quality gates during this refactor and
+feature devlopement.
+we also need to update the repos docuementiaon comprehsnivley for this work.
+</code></pre><p>That prompt produced a detailed, targeted implementation plan covering 26 files, with
+the correct model tier strategy, the right plugin schema, and a working CI integration
+— on the first planning pass. Here&rsquo;s why it worked.</p>
+<h3 id="structure-of-intent-not-structure-of-prose">Structure of intent, not structure of prose<a hidden class="anchor" aria-hidden="true" href="#structure-of-intent-not-structure-of-prose">#</a></h3>
+<p>The model doesn&rsquo;t care about your spelling. What it needs is a clear picture of
+<em>what you want</em>, <em>what already exists</em>, and <em>what cannot change</em>. This prompt delivers
+all three, with no polish whatsoever.</p>
+<p><strong><code>@agents/</code>, <code>@playbooks/</code>, <code>@zuul.d/</code></strong> — these are the most important characters
+in the prompt. In Claude Code, the <code>@</code> prefix is a live context reference. Rather than
+pasting 900 lines of Ansible YAML into the conversation, I pointed at the source
+directly. Claude Code loaded and understood the existing architecture before
+generating a single line of plan. The model&rsquo;s understanding of the codebase was
+grounded in the actual current state of those files, not in my description of them.
+That&rsquo;s the difference between contextual grounding and paraphrasing.</p>
+<p><strong>Required vs. optional, stated explicitly</strong> — &ldquo;first&hellip; second&hellip;&rdquo; sets the hard
+requirements. &ldquo;Optionally it would be nice&hellip;&rdquo; marks what can be deferred. This
+distinction propagates through the planning phase. The model won&rsquo;t trade backward
+compatibility for an optional HTML report. You&rsquo;ve told it the hierarchy.</p>
+<p><strong>&ldquo;lets reason about how to do this interactivly before we proceed to the
+implemation&rdquo;</strong> — This single line is load-bearing. It&rsquo;s an explicit instruction to
+enter a planning loop before touching any code. It&rsquo;s the difference between an agent
+that plans and an agent that acts. I&rsquo;ll come back to why this habit is one of the
+most valuable things you can build.</p>
+<p><strong>Backward compatibility as a hard constraint</strong> — &ldquo;the ci job should continue to
+functon troughut this porcess.&rdquo; Not aspirational. Not a preference. A constraint. When
+this is stated explicitly, the planning system evaluates every proposed change against
+it. Unstated constraints get optimised away.</p>
+<p><strong>Staged delivery acknowledged upfront</strong> — &ldquo;once we have tested the changes locally
+and pushed a pr for review i will also take the review feedback&hellip; in a seperate
+sesssion.&rdquo; This scopes the session. The model isn&rsquo;t trying to solve three iterations
+of refinement in one go. It has a clear definition of done.</p>
+<p>The takeaway isn&rsquo;t that you should write better prompts. It&rsquo;s that you should write
+prompts with <strong>structure of intent</strong> and <strong>contextual grounding</strong>. The typos are
+irrelevant. The architecture they&rsquo;re describing isn&rsquo;t.</p>
+<hr>
+<h2 id="plan-mode-the-iterative-planning-loop">Plan Mode: The Iterative Planning Loop<a hidden class="anchor" aria-hidden="true" href="#plan-mode-the-iterative-planning-loop">#</a></h2>
+<p><strong>TL;DR:</strong> Start every non-trivial task in plan mode. Separating &ldquo;understand and
+plan&rdquo; from &ldquo;execute&rdquo; is one of the highest-leverage habits in agentic development.</p>
+<p>Claude Code&rsquo;s plan mode is a read-only phase where the model explores the codebase,
+asks clarifying questions, and produces a structured implementation plan — without
+touching a single file. Only after you approve the plan does execution begin.</p>
+<p>Most AI coding tools now have some equivalent of this concept. The specific name and
+interaction model varies, but the underlying principle is consistent across the
+ecosystem: <em>separate understanding from execution</em>. Jumping straight to implementation
+is tempting, especially for tasks that feel straightforward. Resist it. The planning
+phase is where ambiguities surface cheaply, before they become bugs or rework.</p>
+<p>What emerged from the planning phase here was a structured document that identified
+exactly which files to change, what changes to make in each, the order of operations,
+and a verification checklist. A representative excerpt from the v1 plan:</p>
+<blockquote>
+<p><strong>Design constraint</strong>: Claude Code resolves a subagent&rsquo;s model from its own
+<code>model:</code> frontmatter — the orchestrating agent cannot override it at call time.
+So model assignment must live in the individual agent definitions.</p>
+</blockquote>
+<p>That&rsquo;s a non-obvious architectural constraint that would have caused confusion
+mid-implementation without the planning phase to surface it. The plan also identified
+the two-tier model strategy: lightweight extraction agents (<code>zuul-context-extractor</code>,
+<code>commit-summary</code>, <code>project-guidelines-extractor</code>) should use <code>model: haiku</code> — mapping
+to a fast, cost-efficient GLM model in the homelab CI — while <code>code-review-agent</code>
+should <code>inherit</code> the session model. That&rsquo;s the power of <code>inherit</code>: in CI it resolves
+to whatever flagship model the job is configured with (GLM-5 or GLM-5-turbo in this
+case), while locally it resolves to whatever model is active in your Claude Code
+session — Opus, Sonnet, or anything else. The agent definition doesn&rsquo;t change; the
+capability scales with the context it&rsquo;s running in. That decision came out of the
+planning conversation, not the initial prompt.</p>
+<p>The full v1 plan is <a href="/teim-review/teim-reivew-v1-plan.md">available here</a> if you want
+to see what a complete planning output looks like for a change of this scope.</p>
+<hr>
+<h2 id="self-reinforcing-review-the-closed-quality-gate">Self-Reinforcing Review: The Closed Quality Gate<a hidden class="anchor" aria-hidden="true" href="#self-reinforcing-review-the-closed-quality-gate">#</a></h2>
+<p>This is the part I find most interesting to reflect on, and I want to be specific
+about what &ldquo;self-reinforcing&rdquo; actually means here — because it&rsquo;s broader than AI
+reviewing AI.</p>
+<p>Once the v1 implementation was in place, the development loop looked like this:</p>
+<pre tabindex="0"><code>implement changes
+      ↓
+pre-commit hooks (ruff, markdownlint, ansible-lint, license headers)
+      ↓
+unit tests (stestr) + molecule tests (role testing)
+      ↓
+/teim-review (AI code review against OpenStack standards)
+      ↓
+triage findings → plan fixes → implement → repeat
+</code></pre><p>The key is that the agent wasn&rsquo;t just asking itself &ldquo;does this look right?&rdquo; It had
+access to linters that enforced objective rules, unit tests that verified behaviour,
+and molecule tests that exercised the Ansible roles in a real environment. When a
+pre-commit hook failed, that was a hard signal — not a suggestion. When a unit test
+broke, the agent knew exactly what it had changed that caused it.</p>
+<p>The AI code review was one layer in a quality gate ecosystem, not the whole gate. And
+that&rsquo;s the right framing for this kind of work generally. An AI reviewer is excellent
+at catching design smells, architectural inconsistencies, missing documentation, and
+patterns that violate project conventions. It is not a substitute for a test suite
+that exercises the actual behaviour. They&rsquo;re complementary, and the combination is
+significantly more valuable than either alone.</p>
+<p>With that context, here&rsquo;s how the review loop played out.</p>
+<h3 id="the-v1-report">The v1 report<a hidden class="anchor" aria-hidden="true" href="#the-v1-report">#</a></h3>
+<p>The first self-review produced <a href="/teim-review/teim-reivew-report-v1.html">this HTML report</a>:</p>
+<ul>
+<li><strong>0 Critical</strong></li>
+<li><strong>1 High</strong> — SKILL.md was missing <code>json_schema</code> and <code>tools_dir</code> parameter
+documentation, meaning local invocations relied on implicit defaults not visible
+to users</li>
+<li><strong>3 Warnings</strong> — plugin.json lacking explicit directory fields, unconditional
+<code>changed_when: true</code> in an Ansible role (idempotency violation), stale reference
+to a deleted role in the docs</li>
+<li><strong>4 Suggestions</strong> — template placeholders, undocumented model strategy, HTML
+artifact placement, fragile regex in post-tasks</li>
+</ul>
+<p>The overall assessment was &ldquo;ready with minor fixes.&rdquo; That&rsquo;s a reasonable first-pass
+outcome for a feature that introduced 24 changed files. The pre-commit and unit test
+gates had already caught the mechanical issues; the AI review was surfacing design
+and documentation gaps.</p>
+<h3 id="triaging-findings-signal-vs-noise">Triaging findings: signal vs noise<a hidden class="anchor" aria-hidden="true" href="#triaging-findings-signal-vs-noise">#</a></h3>
+<p>Not all findings are equal, and one of the key skills in working with AI reviewers is
+developing judgment about what&rsquo;s a genuine issue versus a false positive. This is
+where domain knowledge becomes the deciding vote.</p>
+<p>When I brought the v1 report findings into the next session, the exchange went roughly
+like this:</p>
+<blockquote>
+<p><strong>Me:</strong> lets plan how to adress the new findign iteritively for the first high item
+this is a false positive lets not it in the AGENTS.md so it is not hilighted again.
+auto discovery is supproted adn adding agents and skill to the plugin.json is only
+required if not using the defualt locations. ask me clarifing question on how to
+proceed with the other finding</p>
+</blockquote>
+<p>That fragment captures the pattern well. I identified which finding was a false
+positive and why — auto-discovery is the default; explicit directory fields in
+<code>plugin.json</code> are only needed for non-standard layouts. I told Claude where to
+document this to suppress future false positives. And I explicitly asked for
+clarifying questions rather than letting the model guess at how to handle the
+remaining findings.</p>
+<p>The v2 plan that resulted triaged 8 findings with explicit classifications:</p>
+<ul>
+<li><strong><code>plugin.json</code> missing <code>agents_dir</code>/<code>skills_dir</code></strong> → False positive. Auto-discovery
+is the default. Document in HACKING.rst.</li>
+<li><strong><code>changed_when: true</code> unconditional</strong> → Genuine. Ansible idempotency violation.
+Fix the task conditions.</li>
+<li><strong>Stale <code>ai_context_extraction</code> reference in docs</strong> → Genuine. Update to describe
+the current flow.</li>
+<li><strong>HTML script copied to home directory</strong> → Genuine. As I put it at the time: <em>&ldquo;it
+ideally would not be copied at all but instead executed via the fully qualifed path.
+the git repo will be cloned in the ci job in a well know localtion and we also knwo
+the location of the plugin so we can use the plugin dir info to constuct the fully
+qualifed path and invoke the tool direclty skiping the copy and cleanup entirly&rdquo;</em></li>
+</ul>
+<p>That last one is a good example of domain knowledge flowing back into the
+implementation. The reviewer flagged a smell; I knew the architectural solution
+because I knew the deployment constraints. The reviewer and the engineer each
+contributed what the other couldn&rsquo;t.</p>
+<p>The <a href="/teim-review/teim-reivew-v2-plan.md">v2 plan</a> and
+<a href="/teim-review/teim-reivew-v3-plan.md">v3 plan</a> are available if you want to see how
+the triage and refinement were structured across iterations.</p>
+<h3 id="the-v2-report">The v2 report<a hidden class="anchor" aria-hidden="true" href="#the-v2-report">#</a></h3>
+<p>After addressing the genuine v1 findings, a second self-review produced
+<a href="/teim-review/teim-reivew-report-v2.html">this report</a>:</p>
+<ul>
+<li><strong>0 Critical</strong></li>
+<li><strong>2 High</strong> — plugin install tasks in <code>ai_review_setup</code> had no failure handling
+(newly identified), and the SKILL.md schema path issue correctly elevated from
+suggestion to High</li>
+<li><strong>3 Warnings</strong></li>
+<li><strong>4 Suggestions</strong></li>
+</ul>
+<p>The move from 1 High to 2 High might look like regression. It isn&rsquo;t. One finding was
+newly identified (the failure handling gap), and one was correctly elevated in
+severity. The overall quality of the codebase improved between v1 and v2; the
+reviewer just got a more thorough look at it second time around.</p>
+<p>The v2 assessment: &ldquo;Approve with comments; fix High issues before merge.&rdquo; That&rsquo;s
+exactly the kind of output you want — not a block, but a clear signal of what needs
+attention before the change lands.</p>
+<h3 id="hackingrst-as-an-artifact-of-the-process">HACKING.rst as an artifact of the process<a hidden class="anchor" aria-hidden="true" href="#hackingrst-as-an-artifact-of-the-process">#</a></h3>
+<p>One output of the refinement loop worth highlighting is <code>HACKING.rst</code>. This file
+didn&rsquo;t exist before this feature. It emerged from the need to document patterns the
+AI reviewer was correctly flagging as unusual but that were intentional:</p>
+<ul>
+<li>Plugin manifest has no explicit <code>agents_dir</code>/<code>skills_dir</code> — auto-discovery is the default</li>
+<li>Ansible variable cross-references in <code>defaults/main.yaml</code> — valid pattern, resolved at play time</li>
+<li><code>regex_search</code> with default/fallback guards — intentional safety handling for empty stdout</li>
+</ul>
+<p>When your automated reviewer produces false positives, don&rsquo;t suppress them silently.
+Document <em>why</em> the pattern is intentional. Future contributors and future reviewers —
+human or AI — benefit from understanding the reasoning. HACKING.rst is the right
+place for exactly this kind of project-specific exception documentation.</p>
+<hr>
+<h2 id="from-first-plan-to-merged-commit-the-evolution">From First Plan to Merged Commit: The Evolution<a hidden class="anchor" aria-hidden="true" href="#from-first-plan-to-merged-commit-the-evolution">#</a></h2>
+<p>The commit history tells the broader story of how this system developed before the
+plugin refactor:</p>
+<pre tabindex="0"><code>ee59ccc Add teim-review plugin, skill, and orchestration agent  ← merged commit
+63c018d Enhance code-review-agent with security and maintainability guidance
+9b3c1a7 Add two-tier confidence routing and fix agent/schema alignment
+0d630d8 Improve review signal quality based on reviewer feedback analysis
+e125a1b Add semaphore to limit teim-code-review concurrency to 1
+54ac296 teim-code-review: use glm-5-turbo as opus/reviewer model
+10ec918 update model tier mappings to GLM 5/4.7/4.7-flash
+e84e2be Add test harness with unit tests, molecule tests, and linting
+8a1107d Add structured output and JSON validation for reliable review reports
+</code></pre><p>The plugin refactor was the culmination of a longer arc. Structured output and JSON
+schema validation came first — you can&rsquo;t reliably parse AI output without that.
+A proper test harness came after. Model tier mappings were tuned. Review signal
+quality was improved based on real feedback from human reviewers on actual patches.</p>
+<p>That order matters. You can&rsquo;t productively refactor something you don&rsquo;t understand,
+and you shouldn&rsquo;t refactor something you can&rsquo;t verify. Each earlier commit was either
+adding capability needed for the refactor, or building confidence in what the system
+was actually doing before changing how it was wired together.</p>
+<p>The final plugin commit touched 26 files, added 601 lines, and removed 397:</p>
+<ul>
+<li><strong>New:</strong> <code>.claude-plugin/plugin.json</code> and <code>marketplace.json</code> — the distribution layer</li>
+<li><strong>New:</strong> <code>agents/teim-review-agent.md</code> — single orchestration agent replacing
+multi-step Ansible orchestration</li>
+<li><strong>New:</strong> <code>skills/teim-review/SKILL.md</code> — the <code>/teim-review</code> slash command</li>
+<li><strong>New:</strong> <code>HACKING.rst</code> — documented false-positive patterns</li>
+<li><strong>Updated:</strong> <code>ai_review_setup</code> role — now installs the plugin via
+<code>claude plugin install</code> rather than manually configuring agent paths</li>
+<li><strong>Updated:</strong> <code>ai_code_review</code> role — now invokes a single <code>teim-review-agent</code> call
+rather than multiple sequential agent calls</li>
+<li><strong>Removed:</strong> <code>ai_context_extraction</code> role — its functionality absorbed into
+<code>teim-review-agent</code></li>
+<li><strong>Updated:</strong> All lightweight agents — <code>model: inherit</code> → <code>model: haiku</code></li>
+</ul>
+<hr>
+<h2 id="key-takeaways--lessons-learned">Key Takeaways / Lessons Learned<a hidden class="anchor" aria-hidden="true" href="#key-takeaways--lessons-learned">#</a></h2>
+<p><strong>Always start in plan mode — or the equivalent.</strong></p>
+<p>The line &ldquo;lets reason about how to do this interactivly before we proceed&rdquo; did more
+work than anything else in that initial prompt. It forced a shared understanding of
+the architecture before a single file was touched. Whatever tool you&rsquo;re using, find
+the plan/spec/architect mode and use it by default for anything non-trivial. The
+discipline of separating understanding from execution is where most of the value in
+agentic development comes from.</p>
+<p><strong>Ground your prompts in the actual code, not your description of it.</strong></p>
+<p><code>@agents/</code>, <code>@playbooks/</code>, <code>@zuul.d/</code> — live references, not copy-pasted YAML. The
+model&rsquo;s understanding of the codebase should be built from the actual current state
+of the files, not from your summary of them. Summaries drift. Files don&rsquo;t. Use <code>@</code>
+references to give the agent contextual grounding, and it will plan against reality
+rather than against your memory of reality.</p>
+<p><strong>Structure of intent is what matters, not grammatical structure.</strong></p>
+<p>Every message I sent throughout this work was written quickly, with typos, in
+stream-of-consciousness style. The prompt you read above produced a 26-file
+implementation plan. The effectiveness came from having a clear structure of intent:
+what was required, what was optional, what constraints applied, what was out of scope
+for this session. None of that requires polish. It requires clarity about what you
+actually want.</p>
+<p><strong>Explicitly scope what you&rsquo;re delegating.</strong></p>
+<p>&ldquo;Ask me clarifying questions on how to proceed with the other findings&rdquo; is a powerful
+pattern. It keeps you in the loop for decisions that need your domain knowledge, while
+letting the model handle the mechanical work. The alternative — letting the model
+infer all decisions — leads to implementations that are internally consistent but
+disconnected from your actual constraints.</p>
+<p><strong>The AI reviewer is one layer in a quality gate, not the whole gate.</strong></p>
+<p>The self-reinforcing loop in this work wasn&rsquo;t just AI reviewing AI. It was an agent
+with access to linters, unit tests, and molecule tests that could verify its own work
+against objective signals. Design your quality gate with that in mind: pre-commit
+hooks for mechanical correctness, a test suite for behavioural verification, and an
+AI reviewer for design and convention alignment. They&rsquo;re complementary. Don&rsquo;t ask the
+AI reviewer to do the job of the test suite.</p>
+<p><strong>Develop judgment about false positives early.</strong></p>
+<p>An AI code reviewer will flag things that look unusual. Some flags are correct. Some
+are false positives from patterns the model hasn&rsquo;t seen in the right context.
+Developing the ability to quickly distinguish between &ldquo;this is a genuine issue&rdquo; and
+&ldquo;this is expected behaviour that needs documentation&rdquo; is a skill that improves with
+practice. When you identify a false positive, document it — don&rsquo;t just move on.</p>
+<p><strong>Right model for the task.</strong></p>
+<p>Using <code>haiku</code> for context extraction and <code>inherit</code> for the actual code review is not
+a premature optimisation. In CI, extraction agents run many times per day across
+multiple projects. The cost difference between flash-tier and flagship models is an
+order of magnitude. Design your model assignment strategy deliberately — don&rsquo;t default
+everything to the most capable model just because it&rsquo;s available.</p>
+<p><strong>The iterative loop is the development model.</strong></p>
+<p>Plan → implement → verify (linters, tests, AI review) → triage findings → plan fixes
+→ implement → repeat. This is not overhead on top of development. This <em>is</em> the
+development model when working with agentic AI. Each cycle is faster than the last
+because the codebase improves, the quality gates get better calibrated, and you
+develop better intuition for what to delegate and what to hold.</p>
+<hr>
+<h2 id="references-and-further-reading">References and Further Reading<a hidden class="anchor" aria-hidden="true" href="#references-and-further-reading">#</a></h2>
+<p><strong>Claude Code documentation:</strong></p>
+<ul>
+<li><a href="https://code.claude.com/docs/en/overview">Claude Code overview</a></li>
+<li><a href="https://code.claude.com/docs/en/skills">Extending Claude with skills</a></li>
+<li><a href="https://code.claude.com/docs/en/plugins-reference">Plugin format reference</a></li>
+<li><a href="https://code.claude.com/docs/en/plugin-marketplaces">Creating and distributing plugin marketplaces</a></li>
+</ul>
+<p><strong>Agentic workflows and best practices:</strong></p>
+<ul>
+<li><a href="https://addyosmani.com/blog/ai-coding-workflow/">My LLM coding workflow going into 2026 — Addy Osmani</a></li>
+<li><a href="https://thoughtminds.ai/blog/claude-code-best-practices-for-agentic-coding-in-modern-software-development">Claude Code best practices for agentic coding</a></li>
+<li><a href="https://agiinprogress.substack.com/p/mastering-claude-code-plan-mode-the-game-changing-feature-every-engineer-needs">Mastering Claude Code plan mode</a></li>
+<li><a href="https://alexop.dev/posts/claude-code-customization-guide-claudemd-skills-subagents/">Claude Code customisation: CLAUDE.md, slash commands, skills, and subagents</a></li>
+</ul>
+<p><strong>Session artefacts from this work:</strong></p>
+<ul>
+<li><a href="/teim-review/teim-reivew-v1-plan.md">v1 implementation plan</a></li>
+<li><a href="/teim-review/teim-reivew-v2-plan.md">v2 refinement plan</a></li>
+<li><a href="/teim-review/teim-reivew-v3-plan.md">v3 final refinement plan</a></li>
+<li><a href="/teim-review/teim-reivew-report-v1.html">v1 self-review report</a></li>
+<li><a href="/teim-review/teim-reivew-report-v2.html">v2 self-review report</a></li>
+<li><a href="https://github.com/SeanMooney/openstack-ai-style-guide">openstack-ai-style-guide repository</a></li>
+</ul>
+<hr>
+<p><em>If you&rsquo;re experimenting with agentic AI in your own CI pipelines or want to dig into
+the teim-review implementation, the style guide repo is public. Feel free to reach
+out on IRC (sean-k-mooney) or through the usual OpenStack channels.</em></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://www.seanmooney.info/tags/ai/">Ai</a></li>
+      <li><a href="https://www.seanmooney.info/tags/openstack/">Openstack</a></li>
+      <li><a href="https://www.seanmooney.info/tags/claude/">Claude</a></li>
+      <li><a href="https://www.seanmooney.info/tags/agentic/">Agentic</a></li>
+      <li><a href="https://www.seanmooney.info/tags/development/">Development</a></li>
+      <li><a href="https://www.seanmooney.info/tags/ci/">Ci</a></li>
+      <li><a href="https://www.seanmooney.info/tags/zuul/">Zuul</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://www.seanmooney.info/blog/three-months-with-ai/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Three Months with AI: Building, Coding, and Contributing</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Improving AI Review with AI Review on x"
+            href="https://x.com/intent/tweet/?text=Improving%20AI%20Review%20with%20AI%20Review&amp;url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fagentic-ai-teim-review%2f&amp;hashtags=ai%2copenstack%2cclaude%2cagentic%2cdevelopment%2cci%2czuul">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Improving AI Review with AI Review on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fagentic-ai-teim-review%2f&amp;title=Improving%20AI%20Review%20with%20AI%20Review&amp;summary=Improving%20AI%20Review%20with%20AI%20Review&amp;source=https%3a%2f%2fwww.seanmooney.info%2fblog%2fagentic-ai-teim-review%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Improving AI Review with AI Review on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fagentic-ai-teim-review%2f&title=Improving%20AI%20Review%20with%20AI%20Review">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Improving AI Review with AI Review on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fwww.seanmooney.info%2fblog%2fagentic-ai-teim-review%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Improving AI Review with AI Review on whatsapp"
+            href="https://api.whatsapp.com/send?text=Improving%20AI%20Review%20with%20AI%20Review%20-%20https%3a%2f%2fwww.seanmooney.info%2fblog%2fagentic-ai-teim-review%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Improving AI Review with AI Review on telegram"
+            href="https://telegram.me/share/url?text=Improving%20AI%20Review%20with%20AI%20Review&amp;url=https%3a%2f%2fwww.seanmooney.info%2fblog%2fagentic-ai-teim-review%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Improving AI Review with AI Review on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Improving%20AI%20Review%20with%20AI%20Review&u=https%3a%2f%2fwww.seanmooney.info%2fblog%2fagentic-ai-teim-review%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>© Sean Mooney</span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

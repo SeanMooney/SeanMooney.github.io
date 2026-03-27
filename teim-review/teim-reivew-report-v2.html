@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Code Review Report - WCAG 2.1 Level AA Accessible">
+    <title>Code Review Report</title>
+    <style>
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    color: #e0e0e0;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #2a2a2a 0%, #1e1e1e 100%);
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 111, 0, 0.4);
+    box-shadow: 0 4px 20px rgba(255, 111, 0, 0.2);
+}
+
+h1 {
+    background: linear-gradient(90deg, #ff6f00 0%, #ec407a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, #ff6f00, #ec407a) 1;
+    padding-bottom: 10px;
+}
+
+h2 {
+    background: linear-gradient(90deg, #ffa726 0%, #ec407a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2em;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid;
+    border-image: linear-gradient(90deg, #ffa726, #ec407a) 1;
+    padding-bottom: 8px;
+}
+
+p {
+    margin-bottom: 15px;
+}
+
+ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+code {
+    background-color: #1a1a1a;
+    color: #f8f8f2;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    font-size: 0.9em;
+}
+
+strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Summary Statistics */
+.summary-stats {
+    background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(236, 64, 122, 0.4);
+    box-shadow: 0 2px 15px rgba(255, 111, 0, 0.15);
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.stats-html-only {
+    opacity: 0.65;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+}
+
+.stat-item-label {
+    width: 100%;
+    text-align: center;
+    font-size: 0.75em;
+    color: #888888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 10px 20px;
+    min-width: 120px;
+}
+
+.html-only-badge {
+    display: inline-block;
+    font-size: 0.7em;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background-color: #3a3a3a;
+    color: #999999;
+    border: 1px solid #555555;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-weight: normal;
+}
+
+.stat-number {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.stat-label {
+    color: #b0b0b0;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-critical .stat-number {
+    color: #ff5252;
+    text-shadow: 0 0 15px rgba(255, 82, 82, 0.6);
+}
+
+.stat-high .stat-number {
+    color: #ff9800;
+    text-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
+}
+
+.stat-warning .stat-number {
+    color: #ffab40;
+    text-shadow: 0 0 15px rgba(255, 171, 64, 0.6);
+}
+
+.stat-suggestion .stat-number {
+    color: #a1887f;
+    text-shadow: 0 0 15px rgba(161, 136, 127, 0.6);
+}
+
+/* Enhanced Severity Badges - LARGER */
+.severity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-right: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.severity-badge.severity-critical {
+    background-color: #c62828;
+    color: #ffffff;
+}
+
+.severity-badge.severity-high {
+    background-color: #d53d0d;
+    color: #ffffff;
+}
+
+.severity-badge.severity-warning {
+    background-color: #e07b39;
+    color: #ffffff;
+}
+
+.severity-badge.severity-suggestion {
+    background-color: #5d4037;
+    color: #ffffff;
+}
+
+.severity-icon {
+    font-style: normal;
+    font-size: 1.2em;
+}
+
+/* Collapsible Issue Cards - Enhanced */
+.issue-card {
+    background: linear-gradient(135deg, #1e1e1e 0%, #1a1a1a 100%);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    border-left: 6px solid;
+}
+
+.issue-card.critical {
+    background: linear-gradient(135deg, rgba(198, 40, 40, 0.15) 0%, rgba(198, 40, 40, 0.05) 100%);
+    border-image: linear-gradient(180deg, #ff5252, #c62828) 1;
+    border-left-color: #c62828;
+}
+
+.issue-card.high {
+    background: linear-gradient(135deg, rgba(213, 61, 13, 0.15) 0%, rgba(213, 61, 13, 0.05) 100%);
+    border-image: linear-gradient(180deg, #ff9800, #d53d0d) 1;
+    border-left-color: #d53d0d;
+}
+
+.issue-card.warning {
+    background: linear-gradient(135deg, rgba(213, 61, 13, 0.12) 0%, rgba(213, 61, 13, 0.04) 100%);
+    border-image: linear-gradient(180deg, #ffab40, #d53d0d) 1;
+    border-left-color: #d53d0d;
+}
+
+.issue-card.suggestion {
+    background: linear-gradient(135deg, rgba(93, 64, 55, 0.15) 0%, rgba(93, 64, 55, 0.05) 100%);
+    border-image: linear-gradient(180deg, #a1887f, #5d4037) 1;
+    border-left-color: #5d4037;
+}
+
+.issue-card:hover {
+    background-color: #252525;
+    transform: translateX(2px);
+    transition: all 0.2s ease;
+}
+
+.issue-summary {
+    cursor: pointer;
+    padding: 8px;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.issue-summary::-webkit-details-marker {
+    display: none;
+}
+
+.issue-number {
+    font-size: 0.85em;
+    color: #b0b0b0;
+    font-style: italic;
+}
+
+.issue-description {
+    flex: 1;
+    min-width: 200px;
+}
+
+.confidence {
+    color: #b0b0b0;
+    font-size: 0.9em;
+    font-style: italic;
+    margin-left: auto;
+}
+
+.issue-details {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.issue-details p {
+    margin-bottom: 10px;
+}
+
+/* Positive Observations */
+.positive-observation {
+    background-color: #2a2a2a;
+    border-left: 4px solid #ffa726;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+/* Out-of-Patch Observations */
+.out-of-patch-observation {
+    background-color: #252525;
+    border-left: 4px solid #78909c;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    color: #b0bec5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-container {
+        flex-direction: column;
+    }
+
+    .issue-summary {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .severity-badge {
+        font-size: 1em;
+        padding: 6px 12px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+
+    .container {
+        background: white;
+        border: 1px solid black;
+        box-shadow: none;
+    }
+
+    details {
+        open: true;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container" role="main">
+        <h1>Code Review Report</h1>
+
+        <div class="summary-stats">
+<div class="stats-container" role="region" aria-label="Inline findings (posted to Gerrit)">
+    <div class="stat-item-label">Inline comments</div>
+    <div class="stat-item stat-critical">
+        <div class="stat-number" aria-label="0 critical issues">0</div>
+        <div class="stat-label">Critical</div>
+    </div>
+    <div class="stat-item stat-high">
+        <div class="stat-number" aria-label="2 high issues">2</div>
+        <div class="stat-label">High</div>
+    </div>
+    <div class="stat-item stat-warning">
+        <div class="stat-number" aria-label="3 warnings">3</div>
+        <div class="stat-label">Warnings</div>
+    </div>
+    <div class="stat-item stat-suggestion">
+        <div class="stat-number" aria-label="4 suggestions">4</div>
+        <div class="stat-label">Suggestions</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-number" aria-label="9 total findings">9</div>
+        <div class="stat-label">Total</div>
+    </div>
+</div>
+</div>
+
+        <section role="region" aria-label="Review context">
+<h2>Context</h2>
+<ul>
+<li><strong>Change</strong>: Add teim-review Claude Code plugin, /teim-review skill, and orchestration agent; remove ai_context_extraction role</li>
+<li><strong>Scope</strong>: 25 files across agents/, skills/, .claude-plugin/, playbooks/, roles/, tools/, zuul.d/, docs, and tests</li>
+<li><strong>Impact</strong>: High — restructures the CI review pipeline to a single-invocation model and introduces a user-facing plugin install flow</li>
+</ul>
+</section>
+
+        <h2>Critical Issues</h2><p>None found.</p>
+<section role="region" aria-label="High severity issues">
+<h2>High Issues</h2>
+<details class="issue-card high" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-high">
+            <span class="severity-icon" aria-hidden="true">🔴</span>
+            HIGH
+        </span>
+        
+        <span class="issue-number">1 of 2</span>
+        <span class="issue-description">plugin.json lacks agents_dir and skills_dir fields required by Claude Code plugin spec</span>
+        <span class="confidence">Confidence: 0.8</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>.claude-plugin/plugin.json</code></p>
+<p><strong>Risk</strong>: The plugin install command will silently fail to register any agents or the /teim-review skill because the manifest does not declare where they live. The Claude Code plugin loader needs these path declarations to wire up agents and commands.</p>
+<p><strong>Remediation Priority</strong>: Must fix before the branch can be merged — the plugin install path is untested without these fields.</p>
+<p><strong>Why This Matters</strong>: Without agents_dir and skills_dir, running /plugin install teim-review@openstack-ai-style-guide will produce a plugin entry in the registry but no agents will be discovered and the /teim-review slash command will not be available. This breaks the primary user-facing use case described in AGENTS.md and README.md.</p>
+<p><strong>Recommendation</strong>: Add agents_dir and skills_dir (and optionally commands_dir) to plugin.json. Example: {&quot;name&quot;: &quot;teim-review&quot;, &quot;description&quot;: &quot;...&quot;, &quot;version&quot;: &quot;1.0.0&quot;, &quot;agents_dir&quot;: &quot;agents&quot;, &quot;skills_dir&quot;: &quot;skills&quot;}</p>
+    </div>
+</details>
+
+<details class="issue-card high" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-high">
+            <span class="severity-icon" aria-hidden="true">🔴</span>
+            HIGH
+        </span>
+        
+        <span class="issue-number">2 of 2</span>
+        <span class="issue-description">ai_review_setup plugin install tasks have no failure handling — silent failures will allow the review step to proceed with no agents installed</span>
+        <span class="confidence">Confidence: 0.8</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>roles/ai_review_setup/tasks/main.yaml:69-89</code></p>
+<p><strong>Risk</strong>: If the claude plugin marketplace add or claude plugin install commands fail (e.g. because the Claude CLI version does not yet support the plugin subcommand, or because the style guide directory structure is unexpected), Ansible will continue without error. The subsequent ai_code_review task will then invoke teim-review-agent, which will not be installed, causing a harder-to-diagnose failure deep in the Claude invocation rather than a clear Ansible task failure.</p>
+<p><strong>Remediation Priority</strong>: High — add failed_when: ai_review_setup_marketplace_add.rc != 0 (or rely on default fail-on-nonzero) and add a verification task after install to confirm the plugin is present before proceeding.</p>
+<p><strong>Why This Matters</strong>: Both tasks use changed_when guards based on stdout patterns (added|installed|updated), but neither sets failed_when. If the command exits non-zero, Ansible will fail it, but if it exits zero with unexpected output the role will silently proceed in a broken state.</p>
+<p><strong>Recommendation</strong>: Add a post-install verification step: claude plugin list | grep teim-review, registered as failed_when the pattern is absent. This gives a clear failure message rather than a mystery error from the review step.</p>
+    </div>
+</details>
+
+</section>
+<section role="region" aria-label="Warnings">
+<h2>Warnings</h2>
+<details class="issue-card warning" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-warning">
+            <span class="severity-icon" aria-hidden="true">⚠️</span>
+            WARNING
+        </span>
+        
+        <span class="issue-number">1 of 3</span>
+        <span class="issue-description">SKILL.md references ./schemas/review-report-schema.json but that path is relative to cwd at invocation time, which may not be the style guide repo root when used from an arbitrary project</span>
+        <span class="confidence">Confidence: 0.8</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>skills/teim-review/SKILL.md:21</code></p>
+<p><strong>Impact</strong>: When a user runs /teim-review from inside an OpenStack project that does not contain a schemas/ directory, the teim-review-agent will pass a non-existent schema path to code-review-agent, and structured JSON output validation will be skipped silently or fail. The agent instructions in teim-review-agent.md do not document this relative-path assumption.</p>
+<p><strong>Suggestion</strong>: Change the json_schema line to use an absolute path derived from the plugin installation directory, or document in the skill description that it must be run from the style guide repo root. Alternatively, pass the schema path as an absolute reference using the style guide project directory that is already known at the time the plugin is installed.</p>
+    </div>
+</details>
+
+<details class="issue-card warning" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-warning">
+            <span class="severity-icon" aria-hidden="true">⚠️</span>
+            WARNING
+        </span>
+        
+        <span class="issue-number">2 of 3</span>
+        <span class="issue-description">Jinja2 variable self-reference in ai_code_review/defaults/main.yaml may resolve incorrectly in some Ansible versions</span>
+        <span class="confidence">Confidence: 0.7</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>roles/ai_code_review/defaults/main.yaml:8-17</code></p>
+<p><strong>Impact</strong>: ai_code_review_style_guide_quick_rules and ai_code_review_style_guide_comprehensive reference ai_code_review_style_guide_project using a &gt;- block scalar. In Ansible, variable chaining within defaults is supported but the evaluation order of defaults is not guaranteed when overrides are applied. If a playbook overrides ai_code_review_style_guide_project, the derived paths in ai_code_review_style_guide_quick_rules and ai_code_review_style_guide_comprehensive should update correctly via lazy evaluation, but this is worth explicit testing with molecule.</p>
+<p><strong>Suggestion</strong>: This is a known safe pattern in Ansible defaults, but add a molecule test that sets ai_code_review_style_guide_project to a non-default value and verifies the derived path variables expand correctly.</p>
+    </div>
+</details>
+
+<details class="issue-card warning" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-warning">
+            <span class="severity-icon" aria-hidden="true">⚠️</span>
+            WARNING
+        </span>
+        
+        <span class="issue-number">3 of 3</span>
+        <span class="issue-description">Playbook post_task Jinja2 regex_search usage may fail on Ansible versions before 2.12 where the pattern returns a list differently</span>
+        <span class="confidence">Confidence: 0.7</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>playbooks/teim-code-review/run.yaml:103-112</code></p>
+<p><strong>Impact</strong>: The teim_review_status fact uses regex_search with the capture-group syntax (regex_search(&#39;Critical: (\d+)&#39;, &#39;\\1&#39;)) which returns a list in Ansible &gt;= 2.9 but the fallback or [&#39;0&#39;] pattern assumes the filter returns None on no match. On some Ansible versions a failed regex_search raises an error rather than returning None/empty list. If teim_review_stats.stdout is empty (e.g. jq failed or produced no output), the int conversion will fail.</p>
+<p><strong>Suggestion</strong>: Add a guard: use default(&#39;&#39;) on teim_review_stats.stdout before piping to regex_search, and test the full post_task block with an empty stdout scenario in molecule.</p>
+    </div>
+</details>
+
+</section>
+<section role="region" aria-label="Suggestions">
+<h2>Suggestions</h2>
+<details class="issue-card suggestion" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-suggestion">
+            <span class="severity-icon" aria-hidden="true">ℹ️</span>
+            SUGGESTION
+        </span>
+        
+        <span class="issue-number">1 of 4</span>
+        <span class="issue-description">teim-review-agent.md Step 7 HTML generation uses relative ./tools path only for local mode; the CI path is described as &#39;provided by the invoking prompt&#39; but there is no fallback if it is absent</span>
+        <span class="confidence">Confidence: 0.7</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>agents/teim-review-agent.md:119-134</code></p>
+<p><strong>Benefit</strong>: Making the tools_dir derivation explicit and self-contained in the agent definition would prevent silent skip of HTML generation when teim-review-agent is invoked without the full parameter set (e.g. via the SKILL.md which does not pass tools_dir).</p>
+<p><strong>Recommendation</strong>: Add a default: when tools_dir is not provided by the caller, fall back to &lt;output_dir&gt;/../../tools relative to the agent&#39;s working directory, or derive it from the style_guide_quick_rules path by walking up two levels. Document this fallback in the agent parameters section.</p>
+    </div>
+</details>
+
+<details class="issue-card suggestion" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-suggestion">
+            <span class="severity-icon" aria-hidden="true">ℹ️</span>
+            SUGGESTION
+        </span>
+        
+        <span class="issue-number">2 of 4</span>
+        <span class="issue-description">marketplace.json source field is ./ (relative); the Claude Code plugin marketplace add command may not resolve this correctly when the path is passed as an absolute directory</span>
+        <span class="confidence">Confidence: 0.6</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>.claude-plugin/marketplace.json:11</code></p>
+<p><strong>Benefit</strong>: Using ./ as source in the marketplace catalog is ambiguous: it could mean relative to the marketplace.json file, relative to the repo root, or relative to the current working directory of the claude CLI at installation time. Clarifying this will prevent install failures on some platforms.</p>
+<p><strong>Recommendation</strong>: If the Claude Code spec defines source as relative to the marketplace.json location, ./ is correct. If not, change it to the plugin name teim-review and rely on the parent manifest to provide the absolute path. Add a comment explaining the resolution semantics.</p>
+    </div>
+</details>
+
+<details class="issue-card suggestion" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-suggestion">
+            <span class="severity-icon" aria-hidden="true">ℹ️</span>
+            SUGGESTION
+        </span>
+        
+        <span class="issue-number">3 of 4</span>
+        <span class="issue-description">render_html_from_json.py print statement uses a Unicode checkmark character that may fail in non-UTF-8 terminal environments</span>
+        <span class="confidence">Confidence: 0.6</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>tools/render_html_from_json.py:901</code></p>
+<p><strong>Benefit</strong>: The line print(f&#39;\u2713 HTML report generated: {args.html_file}&#39;) will raise UnicodeEncodeError on Windows terminals or CI environments configured with ASCII encoding. The rest of the script is careful about encoding (uses encoding=&#39;utf-8&#39; on file read/write), but the stdout print is not guarded.</p>
+<p><strong>Recommendation</strong>: Replace the Unicode checkmark with a plain ASCII marker such as [OK] or use a try/except around the print, or set PYTHONIOENCODING=utf-8 in the uv inline script metadata environment block.</p>
+    </div>
+</details>
+
+<details class="issue-card suggestion" open>
+    <summary class="issue-summary">
+        <span class="severity-badge severity-suggestion">
+            <span class="severity-icon" aria-hidden="true">ℹ️</span>
+            SUGGESTION
+        </span>
+        
+        <span class="issue-number">4 of 4</span>
+        <span class="issue-description">AGENTS.md plugin conventions section says agents use model: inherit but commit-summary.md and zuul-context-extractor.md were updated to model: haiku — the documentation is now inconsistent</span>
+        <span class="confidence">Confidence: 0.8</span>
+    </summary>
+    <div class="issue-details">
+        <p><strong>Location</strong>: <code>AGENTS.md:plugin-conventions section</code></p>
+<p><strong>Benefit</strong>: Readers of AGENTS.md will see that all agents should use model: inherit, then check the agent files and find that the extraction agents use haiku. Aligning the documentation prevents confusion for contributors extending the agent set.</p>
+<p><strong>Recommendation</strong>: Update the AGENTS.md plugin conventions section to accurately describe the two-tier model strategy: model: inherit for orchestrators and code-review-agent; model: haiku for lightweight extraction agents (zuul-context-extractor, commit-summary, project-guidelines-extractor). This description is already present in CLAUDE.md but should also appear in AGENTS.md.</p>
+    </div>
+</details>
+
+</section>
+        <section role="region" aria-label="Positive observations">
+<h2>Positive Observations</h2>
+<div class="positive-observation">
+<ul>
+<li><strong>Architecture</strong>: Collapsing three separate Claude invocations into one orchestrated teim-review-agent significantly reduces API call overhead and makes the CI pipeline easier to reason about. The delegation pattern (orchestrator → subagents) is clean and well-documented in the agent frontmatter.</li><li><strong>Maintainability</strong>: Deleting the ai_context_extraction role and absorbing its 515 lines of functionality into the agent removes a significant maintenance surface. The role had duplicate logic with the agent definitions; eliminating it is the right call.</li><li><strong>Tooling</strong>: Adding uv inline script metadata (#!/usr/bin/env -S uv run --script and # /// script block) to render_html_from_json.py is an excellent improvement. It makes the script runnable with zero setup locally while remaining compatible with the CI venv path.</li><li><strong>CI correctness</strong>: Adding the inventory copy step before ai_review_setup in the playbook ensures the Zuul executor inventory is available on the CI node before any Claude invocation. The ordering is correct and the explicit mkdir -p task prevents the copy from failing on a missing directory.</li><li><strong>Variable hygiene</strong>: Changing style_guide_project from a relative name to an absolute path (ansible_user_dir + src_dir) eliminates a class of path-composition bugs that existed when roles were prepending ansible_user_dir themselves. The centralisation in the job definition is clean.</li><li><strong>Documentation</strong>: The new AGENTS.md section on plugin conventions, the CLAUDE.md updates, and the commit message body are all thorough and accurate. The two-tier model strategy (inherit vs haiku) is well-explained and the rationale for each tier is clear.</li><li><strong>Compliance</strong>: The commit includes Generated-by: claude sonnet 4.6 and Signed-off-by: Sean Mooney &lt;work@seanmooney.info&gt;, satisfying both the OpenInfra Foundation AI Policy attribution requirement and the Developer Certificate of Origin.</li>
+</ul>
+</div>
+</section>
+
+        <section role="region" aria-label="Out-of-patch observations">
+<h2>Out-of-Patch Observations</h2>
+<p>These findings are in unmodified code and are not blocking. Consider addressing them in a
+follow-up patch.</p>
+<div class="out-of-patch-observation">
+<ul>
+<li><code>roles/ai_review_setup/tasks/main.yaml:40</code> — The stat.writeable check (ai_review_setup_claude_config_parent.stat.writeable) uses the Ansible stat module&#39;s writeable field, which reflects the permissions of the remote user running the play. On CI nodes this is almost always the ansible_user, so this check rarely catches real problems. It could give a false positive if the node uses ACLs.<br><em>Suggestion: Consider replacing the writeable check with a more direct test: attempt to create the directory with ansible.builtin.file and let it fail naturally, rather than pre-checking writeability.</em></li><li><code>roles/ai_code_review/tasks/main.yaml</code> — The ai_code_review role no longer sets run_claude_code_output_format or validates the JSON output after the Claude invocation. The previous version had JSON validation logic. It is unclear if this validation now happens inside teim-review-agent or has been dropped entirely.<br><em>Suggestion: Add a post-review stat check and basic JSON syntax validation (e.g. python3 -c &#39;import json; json.load(open(...))&#39;) after the Claude invocation to catch malformed output before the HTML generation step attempts to process it.</em></li>
+</ul>
+</div>
+</section>
+
+        <section role="region" aria-label="Summary">
+<h2>Summary</h2>
+<ul>
+<li><strong>Total Issues</strong>: 0 Critical, 2 High, 3 Warnings,
+4 Suggestions</li>
+<li><strong>Overall Assessment</strong>: Approve with comments</li>
+<li><strong>Priority Focus</strong>: Fix plugin.json manifest fields (high) and add plugin install verification (high) before merging. Address the SKILL.md schema path issue (warning) to avoid silent failures for non-style-guide-repo users.</li>
+</ul>
+<p>This is a well-structured refactoring that achieves its stated goals: consolidating the CI review pipeline from three Claude invocations to one and making the repository installable as a Claude Code plugin. The code quality is good, variable hygiene has improved, and the documentation is thorough. Two high-severity issues require attention before merge: the plugin.json manifest is missing the agents_dir and skills_dir declarations that Claude Code needs to discover agents and skills, and the plugin install tasks lack verification steps meaning silent failures could propagate to the review step. Three warnings address edge cases in path resolution, Jinja2 regex_search compatibility, and schema path assumptions in the SKILL.md. Four suggestions cover documentation consistency, a Unicode output issue in the render script, and marketplace.json source field semantics. None of the findings block the overall architecture, which is sound.</p>
+</section>
+
+    </div>
+</body>
+</html>

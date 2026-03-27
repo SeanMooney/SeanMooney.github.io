@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="en" dir="auto" data-theme="dark">
 
 <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,7 +24,7 @@ While that gives watcher some breathing space, our usage is minimal, so we agree
 to drop the dependency by leveraging the existing functionality of apscheduler.">
 <meta name="author" content="Sean Mooney">
 <link rel="canonical" href="https://www.seanmooney.info/blog/2025.2-ptg/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://www.seanmooney.info/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://www.seanmooney.info/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://www.seanmooney.info/favicon-32x32.png">
@@ -42,6 +42,12 @@ to drop the dependency by leveraging the existing functionality of apscheduler."
 
     </style>
 </noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
 <link rel="stylesheet" href="/css/custom.css"><meta property="og:url" content="https://www.seanmooney.info/blog/2025.2-ptg/">
   <meta property="og:site_name" content="Today I learned">
   <meta property="og:title" content="2025.2 Ptg">
@@ -56,24 +62,13 @@ Day 1 Tech Debt Croniter The PTG started with a disscussion about technical debt
     <meta property="article:tag" content="Openstack">
     <meta property="article:tag" content="Ptg">
       <meta property="og:image" content="https://www.seanmooney.info/images/papermod-cover.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.seanmooney.info/images/papermod-cover.png">
-<meta name="twitter:title" content="2025.2 Ptg">
-<meta name="twitter:description" content="Watcher
-PTG Etherpad
-Overview
-The 2025.2 PTG was the Second PTG i have attended for watcher.
-The last PTG had one session to cover all the technical debt required
-to revive the project. This time we extended the ptg to 2 days.
-Day 1
-Tech Debt
-Croniter
-The PTG started with a disscussion about technical debt that emerged during the
-epxoy cycle. This focused mainly on croniter, which is used by watcher to schedule
-continuous audits based on cron strings. The Croniter libaray maintainer has decided
-to stop maintaining this library and it is transitioning to a new maintainer.
-While that gives watcher some breathing space, our usage is minimal, so we agreed
-to drop the dependency by leveraging the existing functionality of apscheduler.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.seanmooney.info/images/papermod-cover.png">
+  <meta name="twitter:title" content="2025.2 Ptg">
+  <meta name="twitter:description" content="Watcher PTG Etherpad
+Overview The 2025.2 PTG was the Second PTG i have attended for watcher. The last PTG had one session to cover all the technical debt required to revive the project. This time we extended the ptg to 2 days.
+Day 1 Tech Debt Croniter The PTG started with a disscussion about technical debt that emerged during the epxoy cycle. This focused mainly on croniter, which is used by watcher to schedule continuous audits based on cron strings. The Croniter libaray maintainer has decided to stop maintaining this library and it is transitioning to a new maintainer. While that gives watcher some breathing space, our usage is minimal, so we agreed to drop the dependency by leveraging the existing functionality of apscheduler.">
 
 
 <script type="application/ld+json">
@@ -130,16 +125,8 @@ to drop the dependency by leveraging the existing functionality of apscheduler."
 }
 </script>
 </head>
-
-<body class=" dark" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    }
-
-</script>
-
-<header class="header">
+<body id="top">
+    <header class="header">
     <nav class="nav">
         <div class="logo">
             <a href="https://www.seanmooney.info/" accesskey="h" title="Today I learned (Alt + H)">Today I learned</a>
@@ -198,7 +185,9 @@ to drop the dependency by leveraging the existing functionality of apscheduler."
     <h1 class="post-title entry-hint-parent">
       2025.2 Ptg
     </h1>
-    <div class="post-meta"><span title='2025-04-15 09:26:03 +0100 +0100'>April 15, 2025</span>&nbsp;·&nbsp;35 min&nbsp;·&nbsp;Sean Mooney&nbsp;|&nbsp;<a href="https://github.com/SeanMooney/seanmooney.info/tree/master/content/blog/2025.2-ptg.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+    <div class="post-meta"><span title='2025-04-15 09:26:03 +0100 IST'>April 15, 2025</span>&nbsp;·&nbsp;<span>35 min</span>&nbsp;·&nbsp;<span>Sean Mooney</span>&nbsp;|&nbsp;<span>
+    <a href="https://github.com/SeanMooney/seanmooney.info/tree/master/content/blog/2025.2-ptg.md" rel="noopener noreferrer edit" target="_blank">Suggest Changes</a>
+</span>
 
 </div>
   </header> <div class="toc">
@@ -1103,9 +1092,14 @@ topics as a community in the open.</p>
 </a>
 
 <script>
-    let menu = document.getElementById('menu')
+    let menu = document.getElementById('menu');
     if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
         menu.onscroll = function () {
             localStorage.setItem("menu-scroll-position", menu.scrollLeft);
         }
@@ -1146,11 +1140,12 @@ topics as a community in the open.</p>
 </script>
 <script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
             localStorage.setItem("pref-theme", 'light');
         } else {
-            document.body.classList.add('dark');
+            html.dataset.theme = 'dark';
             localStorage.setItem("pref-theme", 'dark');
         }
     })

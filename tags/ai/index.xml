@@ -9,11 +9,24 @@
       <url>https://www.seanmooney.info/images/papermod-cover.png</url>
       <link>https://www.seanmooney.info/images/papermod-cover.png</link>
     </image>
-    <generator>Hugo -- 0.150.0</generator>
+    <generator>Hugo</generator>
     <language>en</language>
     <copyright>Sean Mooney</copyright>
-    <lastBuildDate>Mon, 09 Jun 2025 10:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 27 Mar 2026 10:00:00 +0100</lastBuildDate>
     <atom:link href="https://www.seanmooney.info/tags/ai/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Improving AI Review with AI Review</title>
+      <link>https://www.seanmooney.info/blog/agentic-ai-teim-review/</link>
+      <pubDate>Fri, 27 Mar 2026 10:00:00 +0100</pubDate>
+      <guid>https://www.seanmooney.info/blog/agentic-ai-teim-review/</guid>
+      <description>&lt;h1 id=&#34;agentic-loops-and-how-to-use-them&#34;&gt;Agentic Loops and How to Use Them&lt;/h1&gt;
+&lt;h2 id=&#34;executive-summary&#34;&gt;Executive Summary&lt;/h2&gt;
+&lt;p&gt;Over the course of a few sessions with Claude Code, I took an existing multi-agent
+CI code review system and refactored it into a proper Claude Code plugin — complete
+with a marketplace definition, a &lt;code&gt;/teim-review&lt;/code&gt; slash command for local use, and a
+single orchestration agent that replaced three separate Ansible-driven Claude
+invocations. The final commit was 26 files changed, 601 insertions, 397 deletions.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Three Months with AI: Building, Coding, and Contributing</title>
       <link>https://www.seanmooney.info/blog/three-months-with-ai/</link>

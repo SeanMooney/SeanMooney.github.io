@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="en" dir="auto" data-theme="dark">
 
 <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +10,7 @@
 <meta name="description" content="A blog and portfile of thing i discover day to day.">
 <meta name="author" content="Sean Mooney">
 <link rel="canonical" href="https://www.seanmooney.info/tags/nova/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.f49d66caae9ea0fd43f21f29e71a8d3e284517ed770f2aa86fa012953ad3c9ef.css" integrity="sha256-9J1myq6eoP1D8h8p5xqNPihFF&#43;13Dyqob6ASlTrTye8=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://www.seanmooney.info/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://www.seanmooney.info/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://www.seanmooney.info/favicon-32x32.png">
@@ -18,7 +18,7 @@
 <link rel="mask-icon" href="https://www.seanmooney.info/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="https://www.seanmooney.info/tags/nova/index.xml">
+<link rel="alternate" type="application/rss+xml" href="https://www.seanmooney.info/tags/nova/index.xml" title="rss">
 <link rel="alternate" hreflang="en" href="https://www.seanmooney.info/tags/nova/">
 <noscript>
     <style>
@@ -29,6 +29,12 @@
 
     </style>
 </noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
 <link rel="stylesheet" href="/css/custom.css"><meta property="og:url" content="https://www.seanmooney.info/tags/nova/">
   <meta property="og:site_name" content="Today I learned">
   <meta property="og:title" content="Nova">
@@ -36,22 +42,15 @@
   <meta property="og:locale" content="en">
   <meta property="og:type" content="website">
       <meta property="og:image" content="https://www.seanmooney.info/images/papermod-cover.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.seanmooney.info/images/papermod-cover.png">
-<meta name="twitter:title" content="Nova">
-<meta name="twitter:description" content="A blog and portfile of thing i discover day to day.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.seanmooney.info/images/papermod-cover.png">
+  <meta name="twitter:title" content="Nova">
+  <meta name="twitter:description" content="A blog and portfile of thing i discover day to day.">
 
 </head>
-
-<body class="list dark" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    }
-
-</script>
-
-<header class="header">
+<body class="list" id="top">
+    <header class="header">
     <nav class="nav">
         <div class="logo">
             <a href="https://www.seanmooney.info/" accesskey="h" title="Today I learned (Alt + H)">Today I learned</a>
@@ -129,7 +128,7 @@
 The motivation was simple - we have more good ideas than we have time to properly document them. Between my day job, core review responsibilities, and the general time constraints we all face, turning a concept into a well-structured, technically sound specification can take days or weeks. What if AI could help accelerate that process?
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2025-06-08 10:00:00 +0100 +0100'>June 8, 2025</span>&nbsp;·&nbsp;31 min&nbsp;·&nbsp;Sean Mooney</footer>
+  <footer class="entry-footer"><span title='2025-06-08 10:00:00 +0100 IST'>June 8, 2025</span>&nbsp;·&nbsp;<span>31 min</span>&nbsp;·&nbsp;<span>Sean Mooney</span></footer>
   
   <a class="entry-link" aria-label="post link to Auto-Correcting Sean-Speak: Beyond Spell-Check to Real AI Assistance" href="https://www.seanmooney.info/blog/ai-to-spec/"></a>
 </article>
@@ -151,9 +150,14 @@ The motivation was simple - we have more good ideas than we have time to properl
 </a>
 
 <script>
-    let menu = document.getElementById('menu')
+    let menu = document.getElementById('menu');
     if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
         menu.onscroll = function () {
             localStorage.setItem("menu-scroll-position", menu.scrollLeft);
         }
@@ -194,11 +198,12 @@ The motivation was simple - we have more good ideas than we have time to properl
 </script>
 <script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
             localStorage.setItem("pref-theme", 'light');
         } else {
-            document.body.classList.add('dark');
+            html.dataset.theme = 'dark';
             localStorage.setItem("pref-theme", 'dark');
         }
     })
